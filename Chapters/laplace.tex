@@ -1,0 +1,72 @@
+\chapter{Laplace Transform}
+	
+	The \de{Laplace Transform  $\L$} is a powerful operator that allow to express a function $f(t)$ in the domain of the time $t$ to a function $\hat f(s)$ expressed in the domain of the \textbf{complex variable} $s$; in a mathematical way the passage from one domain (in this case time) to another (complex variable) is expressed as 
+	\[ f(t) \mapsto \hat f(s) = \laplace{f(t)} \]
+	
+	Not all function $f$ can be transformed, and this is due to the existence (or not) of the following integral that is used to calculate the transform of the function:
+	\begin{equation}
+		\hat f(s) = \int_{0^-}^\infty f(t) e^{-st} dt = \lim_{\varepsilon\rightarrow 0^+} \lim_{M\rightarrow \infty} \int_{-\varepsilon}^M f(t) e^{-st}\, dt
+	\end{equation}
+	
+	This mathematical tool is very powerful because it can transform \textbf{differential equation} (in the domain of the time) \textbf{into algebraic equation} (in the domain of $s$) which are much easier to solve.
+	
+	\begin{note}
+		This concept can be seen with a logarithm analogy: the product of two number, by the logarithm rule, is easier to calculate because
+		\[ a\cdot b \mapsto \log a + \log b \]
+		so by this with the \textbf{logarithm} you can convert \textbf{product} into \textbf{sums} that are easier to manipulate.
+	\end{note}
+
+	In mechanical system is often required to solve linear differential equation in order to describe the time response of the system itself: this can be done with analytical techniques (such the \textit{constant variations} method), but can be very tricky to solve, or by using the Laplace transform as follows:
+	\begin{itemize}
+		\item with the \textbf{Laplace transform} the differential equation is converted into an algebraic one;
+		\item by analyzing this equation you can determine the \textbf{frequency response} of the system object of study;
+		\item with the \textbf{Laplace inverse transform} it's possible to re-convert the solution from the domain of the complex variable $s$ into the domain of time $t$. 
+	\end{itemize}
+
+\section{Transform properties}
+	
+	The Laplace transform has some important properties that can simplify the hand-made calculus operation; the first important thing to keep is mind is that the Laplace transform is a \de{linear operator}, so for all functions $f(t)\mapsto \hat f(s)$ and $g(t)\mapsto \hat g(s)$ and real constants $a,b\in \mathds R$ it's true that
+	\begin{equation}
+		a \, f(t) + b\, g(t) \mapsto a\, \hat f(s) + b \, \hat g(s)
+	\end{equation} 
+	
+	\begin{demonstration} \label{lap:dem:linearity}
+		The linearity property can be demonstrated by applying the Laplace transform equation to the linear combination of two function:
+		\begin{align*}
+			\laplace{a \, f(t) + b\, g(t)} & = \int_{0^-}^\infty \Big( a\, f(t) + b\, g(t)\Big)e^{-st}\, dt \\
+			& = a \lapint f(t) e^{-st}\, dt + b \lapint g(t) e^{-st}\, dt \\
+			& = a \, \hat f(s) + b \, \hat g(s)
+		\end{align*}
+	\end{demonstration}
+	
+	Another important fact is associated to the \de{scale change} of the time axes; in particular by stretching/expanding the time axes by a value $a>0$ of a function $f(t) \mapsto \hat f(s)$ it's true that:
+	\begin{equation}
+		f(at) \mapsto \frac 1 a \, \hat f\left(\frac s a\right)
+	\end{equation}
+
+	\begin{demonstration}
+		As in demonstration \ref{lap:dem:linearity}, the property of the scale change can be verified by using the definition of the Laplace transform using the change of variables $at = z$ (that means $t= z/a$):
+		\begin{align*}
+			\laplace{f(at)} & = \int_{0^-}^\infty f(at)\, dt \\
+			& = \lapint f(z) e^{-sz/a} \, \frac{dz}{a} \\
+			& = \frac 1 a \, \hat f\left(\frac s a\right)
+		\end{align*}
+	\end{demonstration}
+		
+	Other two important properties are related to the \de{translation} in respect to the $s$ axes as in respect to the $t$ axes (by a coefficient $a>0$) by using the relation that follows:
+	\begin{equation}
+		e^{at} f(t) \mapsto \hat f(s-a) \qquad \, \qquad f(t-a) \mapsto e^{-at} \hat f(s)
+	\end{equation}
+
+	\begin{demonstration}
+		The property of the translation in respect of the $s$ complex variable is done as follows:
+		\begin{align*}
+			\laplace{e^{at}f(t)} & = \lapint e^{at} f(t) e^{-st} \, dt = \lapint f(t) e^{(a-s)t} \, dt \\ & = \hat f(s-a)
+		\end{align*}
+		The demonstration of the translation in respect to time $t$ is a little bit longer and it involves the change of coordinates $z = t-a$:
+		\begin{align*}
+			\laplace{f(t-a)} & = \lapint f(t-a) e^{-st} \, dt = \lapint f(z) e^{-s(z-a)} \, dz \\ 
+			& = e^{-sa} \lapint f(z) e^{-sz}\, dz \\ & = e^{-as} \hat f(s)
+ 		\end{align*} 
+	\end{demonstration}
+	
