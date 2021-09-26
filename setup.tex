@@ -39,9 +39,10 @@
 
 \renewcommand{\L}{\mathscr{L}}
 \newcommand{\aL}{\mathscr{L}^{-1}}
-\newcommand{\laplace}[1]{\mathscr{L} \left[ #1 \right]}
+\newcommand{\laplace}[1]{\mathscr{L} \left\{ #1 \right\}}
 \newcommand{\antilaplace}[1]{\mathscr{L}^{-1} \left[ #1 \right]}
-
+\newcommand{\re}[1]{\textrm{Re}\left(#1\right)}
+\newcommand{\im}[1]{\textrm{Im}\left(#1\right)}
 \newcommand{\lapint}{\int_{0^-}^\infty}
 
 
@@ -187,13 +188,13 @@
 	breakable,
 }
 
-\newcounter{esempi}
-\numberwithin{esempi}{chapter}
-\newenvironment{esempio}[1]{
+\newcounter{exercises}
+\numberwithin{exercises}{chapter}
+\newenvironment{exercise}[1]{
 	\bfcolor{Periwinkle}
 	\noindent
-	\refstepcounter{esempi}
-	{\color{Periwinkle}\textbf{Esempio \theesempi#1}  } 
+	\refstepcounter{exercises}
+	{\color{Periwinkle}\textbf{Exercise \theexercises#1}  } 
 	\vspace{3mm}
 	
 	\noindent
@@ -201,7 +202,33 @@
 }
 
 
-\tcolorboxenvironment{esempio}{
+\tcolorboxenvironment{exercise}{
+	boxrule=0pt,
+	boxsep=0pt,
+	colback={White!90!Periwinkle},
+	enhanced jigsaw, 
+	borderline west={2pt}{0pt}{Periwinkle},
+	sharp corners,
+	before skip=10pt,
+	after skip=10pt,
+	breakable,
+}
+
+\newcounter{examples}
+\numberwithin{examples}{chapter}
+\newenvironment{example}[1]{
+	\bfcolor{Periwinkle}
+	\noindent
+	\refstepcounter{exercises}
+	{\color{Periwinkle}\textbf{Example \theexamples#1}  } 
+	\vspace{3mm}
+	
+	\noindent
+}{
+}
+
+
+\tcolorboxenvironment{example}{
 	boxrule=0pt,
 	boxsep=0pt,
 	colback={White!90!Periwinkle},
