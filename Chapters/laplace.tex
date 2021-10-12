@@ -224,71 +224,55 @@
 	Each basic element can be easily transform using the Laplace table, and in particular
 	\[ \antilaplace{G(s)}(t) \ : \quad -\frac 1 {12} e^{-t} - \frac 3{28} e^{3t} + \frac 4 {21} e^{-4t} \]
 	
+	\paragraph{Multiple real roots} Let's consider now a case in which the rational polynomial has multiple roots such as
+	\[ G(s) = \frac{1+s}{(s-4)^4} \]
+	In this case the partial fraction has to be made not with 4 equals element with denominator $s-4$, but instead consider four increasing exponential terms as follows:
+	\[ i) \qquad \frac{\alpha_1}{s-4} + \frac{\alpha_2}{(s-4)^2} + \frac{\alpha_3}{(s-4)^3} + \frac{\alpha_4}{(s-4)^4} = \frac{1+s}{(s-4)^4} \]
+	This problem can be solved by summing up all the elements and solving the linear system in respect to $\alpha_i$, but a smarter way is to consider that the element $a_{n-k}$ (where $n$ is the number of the multiple root, in this case $4$) can be expressed as $\frac 1 {k!} \lim_{s\rightarrow p} \frac{d^k}{ds^k} \big[ (s-p)^n G(s) \big]$; this process is easier to see considering the stated example. The first thing is to multiply $i)$ with the polynomial $(s-4)^4$ arriving to the relation
+	\[ 1+s = \alpha_1(s-4)^3 + \alpha_2(s-4)^2 + \alpha_3(s-4) + \alpha_4 \]
+	Evaluating this expression for $s=4$ determines the coefficient $\alpha_4 = 5$; in order to determine the other coefficient is to use the proposed \textit{scheme} where each time we differentiate (in respect to $s$) the previous equation and evaluate at the point $s=4$:
+	\begin{align*}
+		& \downarrow d/ds \\ 
+		1 & = 3 \alpha_1 (s-4)^2 + 2 \alpha_2(s-4) + \alpha_3 \qquad & \xrightarrow{s=4} \quad \alpha_3 = 1 \\
+		& \downarrow d/ds \\ 
+		0 & = 6 \alpha_1 (s-4) + 2 \alpha_2 \qquad & \xrightarrow{s=4} \quad \alpha_2 = 0 \\
+		& \downarrow d/ds \\ 
+		0 & = 6 \alpha_1 (s-4) \qquad & \xrightarrow{s=4} \quad \alpha_1 = 0 \\
+	\end{align*}
+	Having determined the coefficients $\alpha_i$ associated to the partial fraction expansion it's possible to compute the inverse transform of the original $G(s)$ that's
+	\[ \antilaplace{G(s)} = \antilaplace{\frac 1 {(s-4)^3}} +5 \antilaplace{\frac 1 {(s-4)^4 }} = \frac 1 2e^{4t}t^2 + 5 \frac 1 6 e^{4t}t^3   \]
+	
+	\begin{example}{: partial fraction expansion with different roots, one which is multiple}
+		Let's consider the following rational polynomial $G(s)$ that's already been split in the factor for the partial expansion:
+		\[G(s):= \frac{1+s}{(s-1)(s+2)^3} = \frac{A}{s-1} + \frac{B}{s+2} + \frac{C}{(s+2)^2} + \frac{D}{(s+2)^3} \]
+		In order to calculate the first coefficient $A$ related to the root $s=1$ we simply need to multiply the last equation with a factor $(s-1)(s+2)^2$ and then evaluate the result in respect to $s=1$:
+		\begin{align*}
+			1+s & = A(s+2)^3 + (s+1) \Big[ B(s+2)^2 + C(s+2) + D \Big] \\
+			\xrightarrow{s=1} \qquad 2 & =A 3^3 \qquad \Rightarrow \quad A = \frac 2 {27}
+		\end{align*}
+		The next step is to calculate the remaining coefficients ($B,C,D$) associated to the multiple root $s=-2$, however with this equation as now stated we cannot apply the method shown; in order to create a proper equation we need to \textbf{deflate} it, so by expanding the $(s+2)^3$ associated to the $A$ coefficient and moving it on the left hand side:
+		\begin{align*}
+			1+s - \frac 2 {27} \Big( s^2 + 6s^2 + 12s +8 \Big) & = (s+1) \Big[ B(s+2)^2 + C(s+2) + D \Big] \\
+			\frac 1 {27} \Big( -2s^3 -12s^2+35s +11 \Big) & =
+		\end{align*}
+		At this point we can divide both sides of the equation by a factor $s-1$ (if this cannot be done on the left hand side, this means that an error in calculation has been done), and so by performing the polynomial division we get the equation
+		\[ \frac 1{27} \left( -2s^2 -14s -11 \right) = B(s+2)^2 + C(s+2) + D \]
+		From this point onward it's possible to use the method shown to calculate the coefficient of the multiple roots; starting evaluating the previous expression at point $s=-2$ we get the value $D = \frac{-8+28-11}{27} = \frac 1 3$. Continuing with differentiation we get
+		\begin{align*}
+			& \downarrow d/ds \\ 
+			\frac{-4s -14}{27} & = 2B(s+2) + C  \qquad & \xrightarrow{s=-2} \quad C = -\frac 2 9 \\
+			& \downarrow d/ds \\ 
+			\frac{-4}{27} & = 2B  & \xrightarrow{s=-2} \quad B = -\frac 2 {27} \\
+		\end{align*}
+	
+		To end the inversion of the starting transform $G(s)$ we can see that
+		\begin{align*}
+			\antilaplace{G(s)}(t) & = \frac 2 {27} \laplace{\frac 1 {s-1}} - \frac 2 {27} \laplace{\frac 1 {s+2}} - \frac 2 {9} \laplace{\frac 1 {(s+2)^2}}  + \frac 1 3 \laplace{\frac 1 {(s+2)^3}} \\
+			& = \frac 2 {27} e^t - \frac 2 {27}e^{-2t} - \frac29 e^{-2t}t + \frac 1 3 \cdot \frac 1 2 e^{-2t} t^2
+		\end{align*} 		
+	\end{example}
+	
+	\subsubsection*{Complex roots} When dealing with complex roots in the denominator, we can always find that they are conjugated and so in order to have an easier factorization of the terms it's easier to consider them as a condensed term represented in the form
+	\[ \frac{As+B}{(s-a)^2+\omega^2} \]
 	
 	
-	
-	
-	
-	
-	
-	
-	\vspace{3cm}
-
-
-	In order to perform the \de{inversion $\aL$} of a \de{Laplace transform} we have to perform the so called \textbf{partial fraction expansion} in order to determine easier contributes to the solution of the problem. In fact if we manage to simplify the rational polynomial that we get from the solution of the differential equation, it's possible (by looking at the table) to determine analytically the solution in the domain of time.
-	
-	In fact in the Laplace table the transforms of the function are always expressed as the ratio of two polynomial $P(s),Q(s)$ with real coefficients in a way $P(s)/Q(s)$, and using the transform to linear system of differential equation all the solution for all the function can be reduced to a pure rational polynomial.
-		
-	\paragraph{Partial fraction expansion with an example} Consider the following rational polynomial:
-	\[ \frac{P(s)}{Q(s)} = \frac{s^2+1}{s^2-4s+4} \]
-	The first thing to do to reduce this polynomial is to factorise the denominator $Q(s)$ in the simplest terms possible. In this case the two roots of the denominators are
-	\[ s_{1,2} = \frac{4 \pm \sqrt{16 - 4 \cdot 4}}{2} = 2 \pm 0 \qquad \Rightarrow \quad Q(s) = (s-2)^2 \]
-	and so the polynomial can be rewritten as
-	\[ \frac{P(s)}{Q(s)} = \frac{s^2+1}{(s-2)^2} = \frac{A}{s-2} + \frac{B}{(s-2)^2} \]
-	The second equality is an assertion that we state in order to get simpler terms, and the problem now is to find the two real coefficients $A$ and $B$:
-	\[ \frac{s+1}{(s-2)^2} = \frac{A(s-2)+B}{(s-2)^2} = \frac{As + b - 2A}{(s-2)^2}  \]
-	By solving the linear problem to equalize the numerators of the rational polynomial we get the values $A=1,B=3$ and so
-	\[ \frac{s^2+1}{s^2-4s+4} = \frac 1 {s-2} + \frac{3}{(s-2)^2} \]
-	This \textit{little terms} can be easily inverted by simply looking at the Laplace transform tables.
-		
-	\textbf{12/10}
-	
-	Considering the problem of an ordinary differential equation, that can be resolved in the complex variable domain if previously transformed by the Laplace operator: the result of this operation is a rational polynomial in the variable $s$ in the form $P(s)/Q(s)$. In general the denominator $Q(s)$ can be rewritten in a factorised form as $q_m(s-s_1)(s-s_2)\dots(s-s_m)$.
-	
-	We can observe that the degree of the polynomial $P(s)$ is always less of the degree of $Q(s)$, otherwise using polynomial division we can rewrite $P(s)$ as $T(s)Q(s) + R(s)$ (where $T,R$ are other polynomial in $s$). At this point we can see that
-	\[ \frac{P(s)}{Q(s)} = \frac{T(s)Q(s) + R(s)}{Q(s)} = T(s) + \frac{R(s)}{Q(s)} \]
-	so every rational polynomial can be reduced into a polynomial that add a rational polynomial with numerator degree less than denominator degree. The problem of this relation is the inversion of $T(s)$; this can be solved by determining the transform of the Dirac delta function $\delta(t)$ that is equal to
-	\begin{equation}
-	\begin{split}
-		\laplace{\delta(t)}(s) & = \lapint \delta(t) e^{-st}\, dt = e^{-st} \Big|_{t=0} \\ & = 1 \\
-		\laplace{\delta'(t)}(s) & = -\lapint \delta'(t) e^{-st} \, dt = - \frac d {dt} \left(e^{-st}\right) \Big|_{t=0} = s e^ {-st} \Big|_{t=0} \\ & = s
-	\end{split}
-	\end{equation}
-	In a more general way we can relate the anti transform of a polynomial as described by impulses following the relation
-	\begin{equation}
-		F(x)
-	\end{equation}
-		
-	\vspace{3mm}
-	Being now sure to have a rational polynomial such that $\#P(s) < \#Q(s)$ it's now possible to invert a transform using the \de{partial fraction expansion} due to the fact that (in most cases) the ratio $P(s)/Q(s)$ cannot be easily determined by the Laplace table. In general real root have transform in the Laplace table 	in the form
-	\[  \frac 1 {(s-a)^n} \qquad \xrightarrow{\aL} \qquad e^{at}\]
-	where $a$ is a real coefficient and $n$ is an integer. Complex roots of the denominator for quadratic polynomial can be expressed instead in the form
-	\[ \frac{As+B}{(s-a)^2 + \omega^2} \]
-	Multiple complex roots can be inversed by using the rule of the transform $t^n f(t) \xrightarrow{\L} -1^n \frac{d^n \hat f(s)}{ds^n}$.
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
