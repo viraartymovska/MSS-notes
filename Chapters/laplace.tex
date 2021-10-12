@@ -91,49 +91,190 @@
 		\end{align*}
 		The demonstration of the translation in respect to time $t$ is a little bit longer and it involves the change of coordinates $z = t-a$:
 		\begin{align*}
-			\laplace{f(t-a)} & = \lapint f(t-a) e^{-st} \, dt = \lapint f(z) e^{-s(z-a)} \, dz \\ 
-			& = e^{-sa} \lapint f(z) e^{-sz}\, dz \\ & = e^{-as} \hat f(s)
+			\laplace{f(t-a)} & = \lapint f(t-a) e^{-st} \, dt = \int_{-a}^\infty f(z) e^{-s(z-a)} \, dz \\ 
+			& = \cancel{e^{-sa} \int_{-a}^{0^-} f(z) e^{-sz}\, dz} + e^{-sa} \lapint f(z) e^{-sz}\, dz 
+			\\ & = e^{-as} \hat f(s)
  		\end{align*} 
+ 		During the decomposition it's possible to cancel out the first integral (second step) because in general we consider function $f(t)$ that are always zero for $t<0$, so by computing the integral that always going to be zero. 
 	\end{demonstration}
 	
-	\subsection*{Existence of the transform}
-		Note that not all function can be transformed using the Laplace operator $\L$; if we choose the function $f(t) = e^{t^2}$, by applying the Laplace transform to this expression we fet the integral
-		\[\laplace{e^{t^2}} = \lapint e ^{t^2-st} \, dt = \int_{0^-}^T e^{(t-s)t}\, dt + \int_T^\infty e^{(t-s)t}\, dt  \]
-		If we consider a costant $T > \re{s}$ we can notice that the second integral $\int_T^\infty e^{(t-s)t}\, dt$ is not convergent for any variable $s\in\mathds C$.
-		
-		\vspace{3mm}
-		In general if a continuous \textbf{function} $f(t)$ is \textbf{upper bounded}, after the time $t\geq T$, with an exponential order function described by the inequality $|f(t)| \leq M e^{Nt}$, then the \textbf{Laplace transform $\hat f(s)$ exists}. \\
-		The existence of the transform is related to the convergence (or divergence) of the second of the following integrals:
-		\[ \laplace f = \int_{0^-}^T f(t)e^{-st} \, dt + \int_T^\infty f(t)e^{-st} \, dt \]
-		Now it $f$ respect the condition to be upper bounded that mean that also the following inequalities are respected:
+\section{Existence of the transform}
+	Note that not all function can be transformed using the Laplace operator $\L$; if, for example, we choose the function $f(t) = e^{t^2}$, by applying the Laplace transform to this expression we get the following integral
+	\[\laplace{e^{t^2}} = \lapint e ^{t^2-st} \, dt = \int_{0^-}^T e^{(t-s)t}\, dt + \int_T^\infty e^{(t-s)t}\, dt  \]
+	If we consider a costant $T > \re{s}$ we can notice that the second integral $\int_T^\infty e^{(t-s)t}\, dt$ is not convergent for any variable $s\in\mathds C$.
+	
+	\begin{demonstration}
+		The full mathematical demonstration of this exercise can be seen as follows. Given the function $f(t) = e^{t^2}$, if it's transform exists (and we call it $\hat f(s)$) should be equal to
+		\[  \hat f(s) = \lim_{M\rightarrow \infty} \int_{0^-}^M e^{t(t-s)} \, dt \]
+		This is a complex integral: if we consider that $s$ is a complex variable, that means that can be expressed in the form $s = a + ib$ (where $i=\sqrt{-1}$ and $a,b\in \mathds R$). Substituting this relation in the formal expression of the transform with get the argument of the integral that is equal to $e^{t(t-a-ib)} = e^{t(t-a)} e^{-ib}$. Using the De-Moire formula\footnote{$\ e^{A+iB} = e^A e^{iB} = e^A(\cos B + i \sin B)$. } it's possible to re-write the previous integral as		
+		\[  \lim_{M\rightarrow \infty} \int_{0^-}^M e^{t(t-a)} \Big( \cos (tb) - i \sin(tb)  \Big) \, dt \]
+		\[ \Rightarrow \qquad \textrm{Re}: \ \lim_{M\rightarrow \infty} \int_{0^-}^M e^{t(t-a)} \cos (tb) \, dt \qquad 
+		\textrm{Im}: \ \lim_{M\rightarrow \infty} \int_{0^-}^M e^{t(t-a)} \sin (tb) \, dt \]
+		Considering the real part of the integral we can see that it's made of a cosine function that multiplies an exponential (that's monotonically ascendant function). Considering now a point $M$ on the time axes where the cosine start increasing from zero and a consequent point with relative distance $\Delta M$ we get that the integral up to $M$ is less then the area up to $M+\Delta M$ and so with that we can see some information:
 		\begin{align*}
-			\left| \int_T^\infty f(t)e^{-st}\, dt  \right| \leq  \int_T^\infty \left|f(t)e^{-st}\right|\, dt   \leq \int_T^\infty M e^{Nt} \left|e^{-st}\right|\, dt
+			\int_0^{M+\Delta M} e^{t(t-a)} \cos(tb)\, dt & \geq \int_0^M e^{t(t-a)} \cos(tb)\, dt + \int_M^{M+\Delta M} e^{M(M-a)} \cos(tb)\, dt \\
+			& \geq \int_0^M e^{t(t-a)} \cos(tb)\, dt + e^{M(M-a)} \int_M^{M+\Delta M} \cos(tb)\, dt 
 		\end{align*}
-		By evaluating the second integral we get it's value for which we can confirm the convergence of the integral when $\re{s} > N$:
-		\[ = \int_T^\infty Me^{Nt} e^{-\re{s} t} \, dt = M \int_T^\infty e^{\left[N-\re{s}\right]t} \, dt\]
-		\[ \xrightarrow{\re s > N} \qquad \lim_{T\rightarrow \infty} \int_T^{\infty} e^{\left[ N -\re s\right]t} \, dt = 0 \]
+		this inequality is true because the exponential keeps growing and so by considering it constant in the range $[M,M+\Delta M]$ will give an integral with less value. This integral has a residual part that's not going to zero, and thus the limit doesn't converge. We have in fact to keep in mind that an improper integral exists if and only if the next equation is verified:
+		\begin{equation}
+			\lim_{a,b \rightarrow \infty} \int_a^b f(t) \, dt = 0
+		\end{equation}
+	\end{demonstration}
+
+	\paragraph{Exponential order functions} A function $f(t)$ can be seen as of \textbf{exponential order} function if only happens that $|f(t)| \leq M e^{Nt}$ after a certain time $t \geq T$ (and $M,N\in \mathds R$ are two constants); in this case (if $f(t)$ is a exponential order function) it's true that \de{Laplace transform always exists} (in at least a part of the complex plane).
+	
+	\begin{demonstration}
+		To demonstrate that a exponential order function has always a Laplace transform by considering only the residual part of the integral, so ranging not from $0^-$, but from $T$ to infinity. In particular we can verify the all the following inequalities are correct:
+		\begin{align*}
+			\left| \int_0^T f(t) e^{-st} \, dt \right| & \leq \left| f(t) e^{-st} \right| \, dt 
+			 \leq \int_0^\infty |f(t)| \left|e^{-st}\right| \, dt \\ 
+			& \leq \int_0^\infty M e^{Nt} \left|e^{-st}\right| \, dt
+		\end{align*}
+		By using the De-Moire formula it's possible to rewrite the $|e^{-st}|$ term that end up resulting
+		\begin{align*}
+			\left|e^{-st}\right| & = \left| e^{-at} \big(\cos(bt) + i \sin(bt)\big) \right| = e^{-at} \big|\cos(bt) + i\sin(bt)\big| \\
+			& = e^{-at} \cancel{\sqrt{\cos^2(bt)  + \sin^2(bt)}}
+		\end{align*}
+		At this point we can continue in the analysis of the inequalities keeping in mind that now on $a = \textrm{Re}(s)$:
+		\begin{align*}
+			\left| \int_0^T f(t) e^{-st} \, dt \right| & \leq \int_T^\infty Me^{Nt} e^{-at} \, dt = M \int_T^\infty e^{(N-a)t} \, dt
+		\end{align*}
 		
+		At this point if $a>N$ we see that the residual $e^{(N-a)t} \xrightarrow{t\rightarrow \infty}0$ goes to zero, hence the integral should have a limited value.	
+	\end{demonstration}
+	By following the definition it's also possible to observe that the \textbf{domain} of the variable $s$ for the Laplace transform of an exponential order function is \textbf{at least} $\forall s = a + ib \in \mathds C$ such that $a = \textrm{Re}(s) \geq N$.
+
+\section{Usage of the Laplace transform}
+	Imagine the problem of solving the following differential equation problem
+	\[ \begin{cases}
+		y'(t) = ay(t) + t \\ y(0) = 1 
+	\end{cases} \]
+	Solving this equation in the domain of time can be difficult in general, and that's why we introduced the Laplace transform and the analysis in the domain of the complex variable $s$. By computing the Laplace transform on the differential equation we get the expression
+	\begin{align*}
+		\laplace{y'(t)}(s) & = \laplace{a y(t) + t} (s) \\ & = a \laplace{y(t)} (s) + \laplace{t}(s)
+	\end{align*}
+	At this point we have to describe an important \textbf{Laplace transform property} that states that the transform of the first derivative $f'(t)$ of a function $f(t) \mapsto \hat f(s)$ is equal to the transform $\hat f(s)$ multiplied by the complex variable $s$:
+	\begin{equation}
+		f'(t) \mapsto s\, \hat f(s) - f(0^+)
+	\end{equation} 
+	where $f(0^+)$ is the value of the function $f(t)$ at the origin of the time axes and, de-facto, represents the initial (Cauchy) condition of the ordinary differential equation problem.
+	
+	This property allow us to solve \de{differential equation} in the time domain as \de{algebraic equations} in the complex variable world; returning back to the initial problem we can rewrite the differential equation as
+	\[ s \, \hat y(s) - \underbrace{1}_{y(0^+)} = a \, \hat y(s) + \underbrace{\frac 1 {s^2}}_{\laplace{t}} \qquad \Rightarrow \quad \hat y(s) = \frac{1 + \frac 1 {s^2}}{s-a} \]
+	\begin{note}
+		To do the calculation it's useful to refer to the property table (\ref{app:lap:properties}) and the common functions transforms (table \ref{app:lap:transforms}) on page \pageref{app:lap:transforms}.
+	\end{note}	
+	
+	\begin{example}{: system of ordinary differential equation}
+		Consider the following system of 2 ordinary differential equation subjected to their initial condition as follows:
+		\[ \begin{cases}
+			x'(t) = y(t) + 1 \\ y'(t) = x(t) + \cos t \\ x(0) = 1 \\ y(0) = 1
+		\end{cases} \]
+		To solve this particular problem we can apply the rules of the Laplace transform to determine the system of 2 equation in the domain of the complex variable $s$ as follows:
+		\begin{align*}
+			i)&&  \underbrace{s \tilde x(s) - x(0)}_{\laplace{x'(t)}}&=\tilde y(s) + \frac 1 s \\
+			ii)&&  \underbrace{s \tilde y(s) - y(0)}_{\laplace{y'(t)}}&=\tilde x(s) + \frac 1 {1+s^2}
+		\end{align*}
+		Knowing the initial condition of the system it's possible to explicit the system of the function $\tilde x,\tilde y$ by using a matrix notation arriving to the following result:
+		\[ \underbrace{\begin{bmatrix}
+			s & -1 \\ -1 & s
+		\end{bmatrix}}_{A(s)} \begin{pmatrix}
+			\tilde x(s) \\ \tilde y(s)
+		\end{pmatrix} = \begin{pmatrix}
+			1 + \frac 1 s \\ \frac  1 {1+s^2}
+		\end{pmatrix} \]
+		The explicit value of the variables $\tilde x,\tilde y$ can be calculated by inverting the matrix $A(s)$ arriving to the following results:
+		\[ \tilde x (s) = \frac{s+1 - \frac 1 {1+s}}{s^2-1} \qquad \tilde y(s) = \frac{\frac s {1+s} - 1  - \frac 1 s }{s^2-1} \]
 		
+	\end{example}
+
+\section{Inversion of the Laplace transform}
+	
+	The \de{inversion} of a Laplace transform is the step that allow to \textit{transport} the algebraic solution found in the $s$ domain into a time description, and so it's represented by the operator $\aL$.
+	
+	An important thing to notice is that while dealing with (systems of) ordinary differential equation is that the result of the transform (such as $\hat x(s)$) is usually expressed as a rational polynomial in the form $P(s)/Q(s)$ (where $P,Q$ are so two polynomial with real coefficients in the variable $s$). It's important also to note that, very often in real application, the degree $\partial P$ of the numerator is less than the degree of the denominator $\partial Q$. When this doesn't \textit{naturally} happen, the step to follow is to use the polynomial division: considering in fact that $P(s)$ in this case can always be rewritten as $T(s)Q(s) + R(s)$, it's easy to see that
+	\[ \frac{P(s)}{Q(s)} = \frac{T(s)Q(s) + R(s)}{Q(s)} = T(s) + \frac{R(s)}{Q(s)} \]
+	The part represented by the polynomial $T(s)$ that has real coefficients is associated to the transform of Dirac pulses function $\delta(t)$: we can in fact note
+	\begin{equation}
+		\begin{split}
+			\laplace{\delta(t)}(s) & = \lapint \delta(t) e^{-st}\, dt = e^{-st} \Big|_{t=0} \\ & = 1 \\
+			\laplace{\delta'(t)}(s) & = -\lapint \delta'(t) e^{-st} \, dt = - \frac d {dt} \left(e^{-st}\right) \Big|_{t=0} = s e^ {-st} \Big|_{t=0} \\ & = s
+		\end{split}
+	\end{equation}
+
+\subsection*{Partial fraction expansion} 
+	Assumed that we now have a transform solution that's a simplified rational polynomial $P(s)/Q(s)$ such that $\partial P < \partial Q$, we can try to compute it's inverse, so the same function but expressed in the time domain. In practise this is done by using the \de{partial fraction expansion} of the rational polynomial: this allows to re-state the solution as a combination of simpler \textit{elements} that can be easily inverted by simply looking a the Laplace table.
+	
+	In order to properly do a partial fraction expansion is important to re-write the denominator of the polynomial ratio in a factorised form such as
+	\[ \frac{P(s)}{Q(s)} = \frac{b_0 + b_1 s + b_2s^2+ \dots + b_ms^m}{\big( s-p_1 \big)^{m_1} \big( s-p_1 \big)^{m_2} \dots \big( s-p_1 \big)^{m_n} } \]
+	where $p_i$ are the roots of the denominator everyone having a molteplicity $m_i$. Depending on the molteplicity of the root and their kind (real or conjugated complex) the procedure to accomplish a partial fraction example can be different. In the following paragraph each possibility will be presented with an example.
+	
+	\paragraph{Real roots} Let's consider the following rational polynomial with no multiple roots:
+	\[ G(s) = \frac{s}{(s-1)(s+3)(s-4)} \]
+	It's factorization is based on determining the coefficients $\alpha_i$ such that
+	\[ i): \qquad \frac{\alpha_1}{s-1} + \frac{\alpha_2}{s+3} + \frac{\alpha_3}{s-4} = \frac{s}{(s-1)(s+3)(s-4)} \]
+	This can be accomplished in two way: the first one is to compute the some of the 3 \textit{basic} element in a parametric form depending on $\alpha_i$ and then solving the linear system in order to determine the correct parameters to satisfy the equality. A second (smarter) way is instead considering that each coefficient can be determined as
+	\[ \alpha_i = \lim_{s\rightarrow p_i} \big(s-p_i\big) G(s) \]
+	Considering the example, to compute the coefficient $\alpha_1$ associated to the root $p = 1$ we can multiply the relation $i)$ with a factor $(s-1)$: this gives us the equation
+	\[ \frac{s}{\cancel{(s-1)}(s+3)(s-4)} \cancel{(s-1)}= \frac{\alpha_1}{\cancel{s-1}} \cancel{(s-1)} + {(s-1) \left( \frac{\alpha_2}{s+3} + \frac{\alpha_3}{s-4} \right)}  \]
+	Evaluating this expression at the point $s=1$ will result in an equation whose only unknown coefficient is $\alpha_1$ (because $\alpha_2,\alpha_3$ are \textit{eliminated} to the multiplication with $s-1$ that goes to zero), and so
+	\[\xrightarrow{s=1} \quad \alpha_1 = \frac{1}{(1+3)(1-4)} = -\frac 1 {12} \]
+	Repeating this process also for the other two roots ($-3,4$) we retrieve the coefficients $\alpha_2 = -\frac 3 {28}$ and $\alpha_3 = \frac 4 {21}$: with that is possible to verify that
+	\[ -\frac 1 {12} \frac 1 {s-1} - \frac 3 {28} \frac 1 {s+3} + \frac 4 {21} \frac{1}{s-4} = \frac{s}{(s-1)(s+3)(s-4)} \]
+	Each basic element can be easily transform using the Laplace table, and in particular
+	\[ \antilaplace{G(s)}(t) \ : \quad -\frac 1 {12} e^{-t} - \frac 3{28} e^{3t} + \frac 4 {21} e^{-4t} \]
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	\vspace{3cm}
+
+
+	In order to perform the \de{inversion $\aL$} of a \de{Laplace transform} we have to perform the so called \textbf{partial fraction expansion} in order to determine easier contributes to the solution of the problem. In fact if we manage to simplify the rational polynomial that we get from the solution of the differential equation, it's possible (by looking at the table) to determine analytically the solution in the domain of time.
+	
+	In fact in the Laplace table the transforms of the function are always expressed as the ratio of two polynomial $P(s),Q(s)$ with real coefficients in a way $P(s)/Q(s)$, and using the transform to linear system of differential equation all the solution for all the function can be reduced to a pure rational polynomial.
 		
+	\paragraph{Partial fraction expansion with an example} Consider the following rational polynomial:
+	\[ \frac{P(s)}{Q(s)} = \frac{s^2+1}{s^2-4s+4} \]
+	The first thing to do to reduce this polynomial is to factorise the denominator $Q(s)$ in the simplest terms possible. In this case the two roots of the denominators are
+	\[ s_{1,2} = \frac{4 \pm \sqrt{16 - 4 \cdot 4}}{2} = 2 \pm 0 \qquad \Rightarrow \quad Q(s) = (s-2)^2 \]
+	and so the polynomial can be rewritten as
+	\[ \frac{P(s)}{Q(s)} = \frac{s^2+1}{(s-2)^2} = \frac{A}{s-2} + \frac{B}{(s-2)^2} \]
+	The second equality is an assertion that we state in order to get simpler terms, and the problem now is to find the two real coefficients $A$ and $B$:
+	\[ \frac{s+1}{(s-2)^2} = \frac{A(s-2)+B}{(s-2)^2} = \frac{As + b - 2A}{(s-2)^2}  \]
+	By solving the linear problem to equalize the numerators of the rational polynomial we get the values $A=1,B=3$ and so
+	\[ \frac{s^2+1}{s^2-4s+4} = \frac 1 {s-2} + \frac{3}{(s-2)^2} \]
+	This \textit{little terms} can be easily inverted by simply looking at the Laplace transform tables.
 		
+	\textbf{12/10}
+	
+	Considering the problem of an ordinary differential equation, that can be resolved in the complex variable domain if previously transformed by the Laplace operator: the result of this operation is a rational polynomial in the variable $s$ in the form $P(s)/Q(s)$. In general the denominator $Q(s)$ can be rewritten in a factorised form as $q_m(s-s_1)(s-s_2)\dots(s-s_m)$.
+	
+	We can observe that the degree of the polynomial $P(s)$ is always less of the degree of $Q(s)$, otherwise using polynomial division we can rewrite $P(s)$ as $T(s)Q(s) + R(s)$ (where $T,R$ are other polynomial in $s$). At this point we can see that
+	\[ \frac{P(s)}{Q(s)} = \frac{T(s)Q(s) + R(s)}{Q(s)} = T(s) + \frac{R(s)}{Q(s)} \]
+	so every rational polynomial can be reduced into a polynomial that add a rational polynomial with numerator degree less than denominator degree. The problem of this relation is the inversion of $T(s)$; this can be solved by determining the transform of the Dirac delta function $\delta(t)$ that is equal to
+	\begin{equation}
+	\begin{split}
+		\laplace{\delta(t)}(s) & = \lapint \delta(t) e^{-st}\, dt = e^{-st} \Big|_{t=0} \\ & = 1 \\
+		\laplace{\delta'(t)}(s) & = -\lapint \delta'(t) e^{-st} \, dt = - \frac d {dt} \left(e^{-st}\right) \Big|_{t=0} = s e^ {-st} \Big|_{t=0} \\ & = s
+	\end{split}
+	\end{equation}
+	In a more general way we can relate the anti transform of a polynomial as described by impulses following the relation
+	\begin{equation}
+		F(x)
+	\end{equation}
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+	\vspace{3mm}
+	Being now sure to have a rational polynomial such that $\#P(s) < \#Q(s)$ it's now possible to invert a transform using the \de{partial fraction expansion} due to the fact that (in most cases) the ratio $P(s)/Q(s)$ cannot be easily determined by the Laplace table. In general real root have transform in the Laplace table 	in the form
+	\[  \frac 1 {(s-a)^n} \qquad \xrightarrow{\aL} \qquad e^{at}\]
+	where $a$ is a real coefficient and $n$ is an integer. Complex roots of the denominator for quadratic polynomial can be expressed instead in the form
+	\[ \frac{As+B}{(s-a)^2 + \omega^2} \]
+	Multiple complex roots can be inversed by using the rule of the transform $t^n f(t) \xrightarrow{\L} -1^n \frac{d^n \hat f(s)}{ds^n}$.
 		
 		
 		
