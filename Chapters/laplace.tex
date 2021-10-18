@@ -188,7 +188,7 @@
 		
 	\end{example}
 
-\section{Inversion of the Laplace transform}
+\section{Inversion of the Laplace transform: partial fraction expansion}
 	
 	The \de{inversion} of a Laplace transform is the step that allow to \textit{transport} the algebraic solution found in the $s$ domain into a time description, and so it's represented by the operator $\aL$.
 	
@@ -200,16 +200,16 @@
 			\laplace{\delta(t)}(s) & = \lapint \delta(t) e^{-st}\, dt = e^{-st} \Big|_{t=0} \\ & = 1 \\
 			\laplace{\delta'(t)}(s) & = -\lapint \delta'(t) e^{-st} \, dt = - \frac d {dt} \left(e^{-st}\right) \Big|_{t=0} = s e^ {-st} \Big|_{t=0} \\ & = s
 		\end{split}
-	\end{equation}
+	\end{equation} \vspace{0.5cm}
 
-\subsection*{Partial fraction expansion} 
 	Assumed that we now have a transform solution that's a simplified rational polynomial $P(s)/Q(s)$ such that $\partial P < \partial Q$, we can try to compute it's inverse, so the same function but expressed in the time domain. In practise this is done by using the \de{partial fraction expansion} of the rational polynomial: this allows to re-state the solution as a combination of simpler \textit{elements} that can be easily inverted by simply looking a the Laplace table.
 	
 	In order to properly do a partial fraction expansion is important to re-write the denominator of the polynomial ratio in a factorised form such as
 	\[ \frac{P(s)}{Q(s)} = \frac{b_0 + b_1 s + b_2s^2+ \dots + b_ms^m}{\big( s-p_1 \big)^{m_1} \big( s-p_1 \big)^{m_2} \dots \big( s-p_1 \big)^{m_n} } \]
 	where $p_i$ are the roots of the denominator everyone having a molteplicity $m_i$. Depending on the molteplicity of the root and their kind (real or conjugated complex) the procedure to accomplish a partial fraction example can be different. In the following paragraph each possibility will be presented with an example.
 	
-	\paragraph{Real roots} Let's consider the following rational polynomial with no multiple roots:
+\subsection{Real roots}
+	\paragraph{Single real root} Let's consider the following rational polynomial with no multiple roots:
 	\[ G(s) = \frac{s}{(s-1)(s+3)(s-4)} \]
 	It's factorization is based on determining the coefficients $\alpha_i$ such that
 	\[ i): \qquad \frac{\alpha_1}{s-1} + \frac{\alpha_2}{s+3} + \frac{\alpha_3}{s-4} = \frac{s}{(s-1)(s+3)(s-4)} \]
@@ -272,7 +272,132 @@
 		\end{align*} 		
 	\end{example}
 	
-	\subsubsection*{Complex roots} When dealing with complex roots in the denominator, we can always find that they are conjugated and so in order to have an easier factorization of the terms it's easier to consider them as a condensed term represented in the form
+\subsection{Complex roots} 
+	Dealing with complex roots on the denominator $Q(s)$ of the solution of the ordinary differential equation has an higher computational difficulty in respect to the real one. An observation that can be done is that if the complex value $\alpha = a + ib \in \mathds C$ is a root of the denominator, so that $Q(\alpha) = 0$, than also it's conjugate $\alpha^* = a - ib$ it's a root. Considering in fact that the polynomial denominator $Q(s)$, evaluated in the point $s = \alpha$, can be expressed as
+	\[Q(\alpha) = q_0 + \alpha q_1 + \alpha^2 q_2 + \dots + \alpha^n q_n = 0 \]
+	where $q_i$ are real coefficients. At this point we have to consider the following property of the conjugate that are true for all couple of complex variables $\alpha,\beta$:
+	\begin{equation}
+	\begin{split}
+		i) & \qquad \big( \alpha + \beta \big)^* = \alpha^* + \beta^* \\
+		ii) & \qquad \big(\alpha \beta\big)^* = \alpha^*\beta^* \\
+		iii) & \qquad \alpha \alpha^* = |\alpha|^2
+	\end{split}
+	\end{equation}
+
+	Now known that $Q(\alpha) = 0$, than also the conjugate $Q^*(\alpha)$ should be equal to zero (because $0^* = 0$) and so by applying the properties we can see that
+	\begin{align*}
+		0 & = Q(\alpha) = Q^*(\alpha) = \Big(q_0 + \alpha q_1 + \alpha^2 q_2 + \dots + \alpha^n q_n \Big)^* \\
+		& = q_0^* + \alpha^* q_1^* + \alpha^{*2} q_2^* + \dots + \alpha^{*n} q_n^* \\
+		& = q_0 + \alpha^* q_1 + \alpha^{*2} q_2 + \dots + \alpha^{*n} q_n
+		= Q\big(\alpha^*\big)
+	\end{align*}
+	This verifies that if $\alpha$ is a root of $Q(s)$, than also it's conjugate $\alpha^*$ is a root of the same polynomial and so we can rewrite the denominator in the form
+	\[ Q(s) = \dots \underbrace{\big(s-\alpha\big) \big(s-\alpha^*\big)}_\textrm{conj. roots} \dots \]
+	
+	\paragraph{Single conjugated complex roots} Let's now assume that we have a rational polynomial that present two conjugated complex roots expressed in the form
+		\[ \frac{P(s)}{Q(s)} = \frac{P(s)}{(s-\alpha)(s-\alpha^*)} = \frac A {s-\alpha} + \frac{B}{s-\alpha^*} \]
+	By trying to apply the partial fraction expansion as for the real root previously described, we can demonstrate that the two coefficients $A$ and $B$ are conjugated, so such that $B = A^*$. In fact by summing the two elements we can see that
+	\begin{align*}
+		\frac A {s-\alpha} + \frac{B}{s-\alpha^*} & = \frac{A(s-\alpha\c) + B(s-\alpha)}{(s-\alpha)(s-\alpha\c)} = \frac{(A+B)s - (A \alpha\c+ B\alpha)}{(s-\alpha)(s-\alpha\c)} 	
+	\end{align*}
+	By expanding the definition of the complex variable (so expanding $A = a+ib$, $B = c+id$...) and considering that the polynomial $P(s)$ at the numerator has only real coefficients it's possible to see that, in order to verify the equality, it must be $a = c$ and $b = - d$, and so the two complex values $A$ and $B$ must be conjugated.
+	
+	\vspace{3mm} Proven that $B = A\c$ now the problem is to find such complex value $A$ in order to satisfy the partial fraction expansion; in order to do so we can try to use the same approach shown for real roots by multiplying both members of the equation by $Q(s)$ and then evaluating the result for $s = \alpha$:
+	\[ \frac{P(s)}{(s-\alpha)(s-\alpha^*)} = \frac A {s-\alpha} + \frac{B}{s-\alpha^*} \qquad \xrightarrow[Q(s)]{\times} \qquad P(s) = A(s-\alpha\c)	+ A\c(s-\alpha)  \]
+	\[ \Rightarrow \qquad P(\alpha) = A (\alpha-\alpha\c) + \cancel{A\c (\alpha-\alpha)}\]
+	Considering now that $\alpha-\alpha\c$ conresponds to a purely imaginary number equals 2 times the imaginary part of the root $\alpha$, we can invert that relation in order to explicitly get $A$:
+	\[ A =\frac{P(\alpha)}{2 i \im{\alpha}} = - i \frac{P(\alpha)}{2\im \alpha} \]
+	
+	\vspace{3mm}
+	Let's now try to consider a real case scenario where we want to deal with the inversion of the following rational polynomial (that's consequently expanded):
+	\[ \frac s { \big( s - (1+i) \big)\big( s - (1-i) \big) } = \frac A {s - (1+i)} + \frac {A\c}{s-(1-i)}  \]
+	We can now multiply both members of the equation by the denominator $Q(s)$ and then evaluate the result for the point $s  = 1+i$ (root of the denominator):
+	\[ s = A \big(s-(1-i)\big) + A\c\big(s-(1+i)\big) \qquad \xrightarrow{s = 1+i} \quad 1+i = A \big(1+i - 1 + i\big)\]
+	\[ \Rightarrow \qquad A = \frac{1+i}{2i} = \frac 1 2 \big(1 - i	\big) \]
+	With this value retrieved we can now state that
+	\[ \frac s { \big( s - (1+i) \big)\big( s - (1-i) \big) } = \frac 1 2 \left(\frac {1-i} {s - (1+i)} + \frac {1+i}{s-(1-i)} \right)  \]
+	Unfortunately watching the Laplace table we can see there's no possible match between the known transform (where the numerator is expressed as a pure real number) and the complex coefficient retrieved. But an interesting fact that we can note is that by \textit{merging} the two components we can get a rational polynomial with real coefficient: in a general way we can in fact state that
+	\begin{align*}
+		\frac A {s-\alpha} + \frac{A\c}{s-\alpha\c} & = \frac{A(s-\alpha\c) + A\c(s-\alpha)}{(s-\alpha)(s-\alpha\c)} \\
+		& = \frac{ s\big(A+A\c\big) - A\alpha\c - A\c\alpha }{s^2 - s \big(\alpha+\alpha\c\big) + |\alpha|^2}
+	\end{align*}
+	This rational polynomial can be matched with the following transform:
+	\begin{align*}
+		\laplace{Ce^{at}\cos(\omega t) + D e^{at}\sin(\Omega t)} & =C \frac{s-a}{(s-a)^2+\omega^2} + D \frac{\omega}{(s-a)^2 + \omega^2} \\
+		& = \frac{Cs - \big(D\omega - Ca\big)}{(s-a)^2 + \omega^2 }
+	\end{align*}
+	Given now the values of $\alpha,A$, the problem is to find the expression of the coefficients $a,\omega,C$ and $D$; in order to to so we can perform two steps:
+	\begin{enumerate}
+		\item match the denominator in order to find $a$ and $\omega$; in order to compare the denominator it's useful to expand the denominator $(s-a)^2 + \omega^2 = s^2  - 2sa + a^2 + \omega^2$. At this point by relating the function we can see that
+		\[ \cancel {s^2} - s \big(\alpha+\alpha\c\big) + |\alpha|^2 = \cancel{s^2}  - 2sa + a^2 + \omega^2  \]
+		\[ \Rightarrow \quad \begin{cases}
+			-2sa = - s\big(\alpha + \alpha \c\big) \\ \alpha^2+\omega^2 = |\alpha|^2 
+		\end{cases} \qquad \Rightarrow \quad a = \frac{\alpha + \alpha\c}{2} = \re \alpha 	\]
+		\[ \Rightarrow \quad \omega = \sqrt{|\alpha|^2-a^2}  = \sqrt{|\alpha|^2-\textrm{Re}^2\alpha} = \sqrt{\textrm{Im}^2\alpha} = \pm \im\alpha  \]
+		
+		\item at this point, known $a$ and $\omega$, it's possible to match the numerator in order to get the coefficients $C$ and $D$:
+		\[ s\big(A+A\c\big) - A\alpha\c - A\c\alpha = Cs - \big(D\omega - Ca\big) \]
+		\[ \Rightarrow \quad \begin{cases}
+			A + A\c = C \\ -A\alpha\c - A\c\alpha = D\omega - Ca
+		\end{cases} \qquad \Rightarrow \quad C = A+A\c = 2 \re{\alpha}\]
+		\[ \Rightarrow \qquad D = \frac{Ca - A \alpha\c  - A\c \alpha}{\omega}  \]
+	\end{enumerate}
+	
+	\begin{example}{: inversion of a transform with two conjugated complex roots}
+		Let's consider the following rational polynomial that has to be inverted:
+		\[ \frac{s+1}{s^2+s+10} \]
+		At this point we can verify that the roots of the denominator are complex conjugated by simply applying the quadratic formula to retrieve them $s_{1,2} = \frac{-1\pm\sqrt{-9}}{2}$. At this point the problem of the inversion if finding the parameters $a,\omega,C,D$ such that
+		\[ \frac{s+1}{s^2+s+10} = C \frac{s-a}{(s-a)^2+\omega^2} + D \frac{\omega}{(s-a)^2 + \omega^2} \]
+		By comparing the denominators we can observe that $-2sa = s$ and so $a = -\frac 1 2$ and so 
+		\[ a^2+ \omega^2 = 10 \qquad \Rightarrow \quad \omega = \sqrt{10-a^2} = \frac{\sqrt{39}}{2}\]
+		At this point it's possible to compare the denominator (considering that now $a,\omega$ are known) that's lead to
+		\[ s + 1 = C\left( s - a\right) + D\omega \qquad \Rightarrow \quad C = 1 \qquad,\quad D = \frac{1+Ca}{\omega} = \frac 1 {\sqrt{39}} \]
+		
+		Retrieved all the coefficient we can explicitly state the inversion of the original rational polynomial:
+		\[ \laplace{\frac{s+1}{s^2+s+10} }(t) = e^{-\frac 1 2t} \left[ \cos\left( \frac{\sqrt{39}}{2} t \right) + \frac{1}{\sqrt{39}} \sin\left( \frac{\sqrt{39}}{2} t \right) \right] \]
+	\end{example}
+	
+	\paragraph{Multiple complex roots} Dealing with multiple complex roots requires even more computational steps; let's consider the generic case of a multiple complex root of multiplicity of 2 that's already expanded:
+	\[ \frac {P(s)}{(s-\alpha)^2(s-\alpha\c)^2} = \frac{A}{s-\alpha} + \frac{B}{(s-\alpha)^2} + \frac{A\c}{s-\alpha\c} + \frac{B\c}{(s-\alpha\c)^2} \]
+	As in all the previously cases in order to compute the first parameter $B$ it's possible to multiply both sides of the equation by the denominator $Q(s) = (s-\alpha)^2(s-\alpha\c)^2$ and then evaluate the relation at the root $s = \alpha$:
+	\[ P(s) = A (s-\alpha)(s-\alpha\c)^2 + B (s-\alpha\c)^2 + A\c(s-\alpha\c)(s-\alpha)^2 + B\c (s-\alpha)^2  \]
+	\[ \Rightarrow \quad P(\alpha) = B \underbrace{\big(\alpha-\alpha\c\big)}_{=2\im \alpha} \,^2 \qquad \Rightarrow \quad B = \frac{P(\alpha)}{4 \textrm{Im}^2(\alpha)} \]
+	Now in order to calculate the second parameter $A$ of the relation we have to deflate te elements associated to $B$ and then, as for the multiple real roots, compute the derivative in respect to the variable $s$:
+	\begin{align*} 	
+	\xrightarrow{\textrm{deflation}} \quad P(s) - B(s-\alpha\c)^2 - B\c(s-\alpha)^2  & = A(s-\alpha)(s-\alpha\c)^2 + A\c(s-\alpha\c)(s-\alpha)^2 \\
+	& \, \downarrow \ d/ds \\
+	P'(s) - 2B\big(s-\alpha\c\big) - 2B\c\big(s-\alpha\big) & = A \big(s-\alpha\c\big) \Big[ s-\alpha\c + s \big(s-\alpha\big) \Big] \\ & \  + A\c \big(s-\alpha\big)\Big[ s-\alpha + 2\big(s-\alpha\c\big) \Big]
+	\end{align*} 
+
+	By now evaluating the expression at the point $s = \alpha$ it's possible to have a clear definition of the complex variable $A$:
+	\[ P'(\alpha) - 2B \big(s-\alpha\c\big) = A \big(\alpha-\alpha\c\big)^2 \qquad \Rightarrow \quad A = \frac{P'(\alpha) - 2B\big(s-\alpha\c\big)}{4\textrm{Im}^2(\alpha)} \]	
+	
+	\begin{example}{: inversion of a transform with multiple complex roots}
+		Let's consider the following rational transform that has to be inverted:
+		\[ \frac{s^2}{\big(s^2 + s + 1\big)^2} \]
+		The first thing to notice that the multiple roots are complex because calculating their value by using the quadratic formula it happens that
+		\[ s_{1,2} = \frac{-1 \pm \sqrt{1-4}}{2} = -\frac 1 2 \pm i \frac{\sqrt 3}{2} \]
+		For sake of semplicity of representation of the equation, from now on these roots value will be reported as $z = -\frac 1 2 + \frac{\sqrt 3}{2}$ and $z\c = -\frac 12 - \frac{\sqrt 3}{2}$. At this point it's possible to express  the parametric partial fraction expansion of the transform as
+		\[ \frac{s^2}{\big(s^2 + s + 1\big)^2} = \frac{A}{s-z} + \frac{A\c}{s-z\c} + \frac{B}{(s-z)^2} + \frac{B\c}{(s-z\c)^2}\]
+		In order to retrieve the value of the coefficient $B$ we multiply both the sides by the factor $Q(s) = (s^2+s+1)^2 = (s-z)^2(s-z\c)^2$ that, evaluated at the point $s =z $, will give the expression
+		\[ z^2 = B \underbrace{\big(z-z\c\big)}_{i\sqrt 3} \, ^2 \qquad \Rightarrow \quad B = -\frac{z^2}{3} = - \frac{\left(-\frac 1 2  + i\frac{\sqrt 3}{2}\right)^2}{3} = - \frac 1 6  - i \frac{\sqrt 3}{6} \]
+		
+		By deflating the term presenting the parameter $B$ just calculate we can get the relation
+		\[ s^2 - B(s-z\c)^2 - B\c(s-z)^2 = A(s-z)(s-z\c)^2 + A\c (s-z\c)(s-z)^2 \]
+		\[ \xrightarrow{d/ds} \quad 2s -2B(s-z\c) - 2B\c(s-z) = A(s-z\c)^2 +2(A + A\c)(s-z)(s-z\c) + A\c (s-z)^2  \]
+		Having computed the derivative of the relation in respect to the variable $s$ it's possible to compute the parameter $A$ just by evaluating the result in the point $s = z$:
+		\[ 2z - 2B\big(z-z\c\big) = A \big(z-z\c\big)^2 \qquad \Rightarrow \quad A = -\frac{2z - 4iB \im z}{4\textrm{Im}^2(z)} = - i\frac{2}{3\sqrt 3} \]
+	\end{example}
+	
+	
+	
+	
+	
+	
+	
+	
+	\vspace{5cm}
+	When dealing with complex roots in the denominator, we can always find that they are conjugated and so in order to have an easier factorization of the terms it's easier to consider them as a condensed term represented in the form
 	\[ \frac{As+B}{(s-a)^2+\omega^2} \]
 	
 	
