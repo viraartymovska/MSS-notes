@@ -389,15 +389,78 @@
 		\[ 2z - 2B\big(z-z\c\big) = A \big(z-z\c\big)^2 \qquad \Rightarrow \quad A = -\frac{2z - 4iB \im z}{4\textrm{Im}^2(z)} = - i\frac{2}{3\sqrt 3} \]
 	\end{example}
 	
+	\paragraph{Parametric solution for multiple complex roots} To solve the partial fraction expansion of multiple complex roots it's possible to use a parametric formula where the numerator are defined as polynomials $A,B$ in a generic variable $t$; in particular for the double complex root the expansion can be expressed as
+	\begin{equation}
+		\frac{P(s)}{\big(s^2-as +t\big)^2 Q(s)} = \frac{A'(t)s + B'(t)}{s^2-as+t} - \frac{A(t)s + B(t)}{\big(s^2-as+t\big)^2} + \frac{q_t(s,t)}{Q(s)} 
+	\end{equation}
+	where the term $q_t(s,t)$ represent the derivative $\partial q/\partial t$ of the remaining term on the numerator after the partial fraction expansion. If the polynomial has 3 complex roots than the parametric decomposition becomes
+	\begin{equation} \label{eq:laplace:3mulrcomplroots}
+		2\frac{P(s)}{\big(s^2-2as +t\big)^3 Q(s)} = 2\frac{A(t)s + B(t)}{\big(s^2-2as+t\big)^3} - 2\frac{A'(t)s + B'(t)}{\big(s^2-2as+t\big)^2} +  \frac{A''(t)s + B''(t)}{s^2-as+t} + \frac{q_{tt}(s,t)}{Q(s)} 
+	\end{equation}
+	where $q_{tt}=\partial^2q/\partial t^2$.  \vspace{3mm}
 	
+	This process can be better seen by considering a numerical example like the one that follows:
+	\[ \frac{s^2+1}{(s-1)(s^2-2s+2)^3} = \frac{A}{s-1} + \frac{B_1s + B_2}{(s^2-2s+2)^3} + \frac {C_1s + C_2}{(s^2-2s+2)^2} + \frac{D_1s+D_2}{s^2-2s+2}\]
+	The first coefficient $A$ of the partial fraction expansion (associated to a single real root) can be determined easily with the methods previously described and so
+	\[ A= \left. \frac{s^2+1}{(s^2-2s+2)^3} \right|_{s=1} = 2	\]
 	
+	At this point it's important to acknowledge hot compute the parametric functions $A,B,q$; in particular this can be done by writing the following relation:
+	\[ \frac{s^2+1}{(s-1)(s^2-2s+2)} = \frac{A(t)s+B(t)}{s^2-2s+t} + \frac{q(t)}{s-1} \]
+	We can note that the left hand side is equal to the original rational polynomial with the only difference that the term $s^2-2s+2$ is now considered once; the right hand side is instead the \textit{correct} partial fraction expansion of the other side with the difference that the coefficient $A,B,q$ are now function of the variable $t$ and the last known coefficient of the complex root (in this case the $+$) has been replaced with the variable $t$. \\
+	By multiplying both member of the equation by the denominator of the left hand side we derive the following equation:
+	\[ s^2+1= \Big(A(t)s + B(t)\Big) (s-1) + q(t) \big(s^2-2s+t\big) \]
+	This expression allows now us to compute the parametric form of the function $A,B,q$; in particular considering that $s^2-2s+t= 0$ and so $s^2 = 2s-t$ we can rewrite the previous expression as
+	\[ 2s-t+1 = A(t)(2s-t) - A(t) s + B(t)s -B(t) + \cancel{q(t) \big(2s-t - 2s +t\big)} \]
+	\[\Rightarrow \quad \begin{cases}
+		2 & = A(t) + B(t) \\
+		-t+1 & =-tA(t) - B(t) 
+	\end{cases} \qquad \Rightarrow \quad A(t) = 1 - \frac{2}{t-1} \ , \quad B(t) = 1 + \frac{2}{t-1} \]
+	In order to have the complete the partial fraction expansion we need to compute the derivative (up to the second order) and evaluate them for $t=3$ (noting that $A(2) = -1 $ and $B(2) = 3$):
+	\[ A' = \left.\frac{2}{(t-1)^2}\right|_{t=2} = 2 \qquad B' =  \left.-\frac{2}{(t-1)^2}\right|_{t=2} = 2 \]
+	\[ A'' = \left. -\frac 4{(t-1)^3} \right|_{t=2} = -4 \qquad B'' = \left. \frac 4{(t-1)^3} \right|_{t=2} = 4 \]
 	
+	With all the coefficient defined is possible to express numerically the partial fraction expansion by using the equation \ref{eq:laplace:3mulrcomplroots}:
+	\[ \frac 2 {s-1} + \frac{-s + 3}{(s^2-2s+2)^3} -2 \frac{s-1}{(s^2-2s+2)^2} + \frac 12 \frac{-4s+4}{s^2-2s+2}\]
+
 	
+
+\section{Boundary value problem}
+	Usually some differential equation problems requires some condition that are not defined at the initial time $t=0$ of the time axes, but in a more general point $t=t^*$: in order to solve this problem a parametric approach is recomended. As example let's consider the following problem:
 	
+	\[ \begin{cases}
+		x''(t) + y'(t) = \sin(t) \\ y'(t) + x'(t) = 1 + \sin(t) \\
+		x(0) = 0 , \quad y(0) = -1,\quad x(1) = 1
+	\end{cases} \]
 	
+	As we can see the last condition constrains the solution $x(t),y(t)$ at the time $t=1$; in order to solve the problem in the Laplace domain we apply the transform on the system of differential equation and so
+	\[ \begin{cases}
+		s^2 \hat x(s) - x'(0) - s x(0)  + s\hat y(s) - y(0) = \frac 1 {s^2+1} \\
+		s \hat y(s) - y(0) + s\hat x(s) - x(0) = \frac 1 s + \frac{1}{s^2+1}
+	\end{cases} \]
+	If we now try to substitute the boundary condition on the problem we can see that we have no information for $x'(t)$ at the initial time: the idea now is to solve the problem parametrically (assign a variable, in this case $A$, to the initial condition $x'(0)$ ) and solve the problem this way. At the and we have to find the constant value $A$ such that $x(1) = 1$. So by substituting we get
+	\[ \begin{cases}
+		s^2 \hat x(s) - A + s\hat y(s) +1 = \frac 1 {s^2+1} \\
+		s \hat y(s) +1 + s\hat x(s) = \frac 1 s + \frac{1}{s^2+1}
+	\end{cases} \]
+	To simplify the calculation of the algebraic solution of the functions $\hat x,\hat y$ we rewrite the system in matrix form that, by inversion, can determine the solutions (by using the Kramer method):
+	\[ \begin{bmatrix}
+		s^2 & s  \\ s & s
+	\end{bmatrix} \begin{pmatrix}
+		\hat x(s) \\ \hat y(s)
+	\end{pmatrix} = \begin{pmatrix}
+		\frac{1}{s^2+1} + A - 1 \\ \frac 1 s + \frac{1}{s^2+1} - 1	
+	\end{pmatrix} \]
+	\[ \Rightarrow \qquad \hat x(s) = \dfrac{\det\begin{bmatrix}
+		\frac{1}{s^2+1} + A - 1 & s  \\ \frac 1 s + \frac{1}{s^2+1} - 1 & s
+	\end{bmatrix} }{\det \begin{bmatrix}
+		s^2 & s  \\ s & s
+	\end{bmatrix}} = \frac{sA - 1}{s^2(s-1)} \]
+	Having the boundary condition set on $x(t)$, our focus is to invert only the related transform $\hat x(s)$ (because, for the sake of the problem, it's not relevant determining $y(t)$ ); by doing the parametric partial fraction expansion we have
+	\[ \frac{sA - 1}{s^2(s-1)} = \frac{c_1}{s-1} + \frac{c_2}{s} + \frac{c_3}{s^2}  \]
+	where, by solving the linear system, the coefficients are equals to $c_1 = A-1$, $c_2 = 1-A$ and $c_3 = 1$. At this point we have everything in order to compute the inverted function of $\hat x(s)$:
+	\[ x(t) = \antilaplace{\hat x(s)}(t) = (A-1)e^t + (1-A) + t \]
+	The last thing to do now is to evaluate the function $x(t)$ at the time $t=1$ and equal the result to $1$ in order to determine the coefficient $A$ related to the initial first derivative of $x$:
+	\[ x(1) = (A-1) e + (1-A) + 1 = 1 \qquad \Rightarrow \quad A = 1 \]
 	
-	\vspace{5cm}
-	When dealing with complex roots in the denominator, we can always find that they are conjugated and so in order to have an easier factorization of the terms it's easier to consider them as a condensed term represented in the form
-	\[ \frac{As+B}{(s-a)^2+\omega^2} \]
 	
 	
