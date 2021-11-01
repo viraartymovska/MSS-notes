@@ -1,1 +1,159 @@
 \chapter{Constrained Minimization}
+
+\section*{Calculus revision}
+	Given a function $f:\mathds R^n\rightarrow \mathds R$ it's possible to compute it's \textbf{minimum} by doing the assumption that $f$ has a \textbf{Lipschitz continuos gradient}, notated as $f\in C^1(\R^n)$, meaning that
+	\[ \exists \, \gamma > 0 \quad \textrm{such that} \quad \left\| \nabla f(\vett x)^t - \nabla f(\vett y)^t\right\| \leq \gamma \| \vett x - \vett y\| \qquad \forall \vett x,\vett y \in \R^n  \]
+	
+	A point $\vett x^*\in R$ is a \textbf{global minimum} if $f(\vett x^*) \leq f(\vett x)$ for all $\vett x\in \R$, file the point is a \textbf{local minimum} if $f(\vett x^*) \leq f(\vett x)$ for $\vett x \in B(\vett x^*,\delta)$. In particular the minimum is \textbf{strict} defined then it means $f(\vett x^*) < f(\vett x)$.
+	
+	\paragraph{Necessary conditions} Necessary (but not sufficient) condition for a point $\vett x^* \in \R^n$ to be a local minimum is that
+	\[ \nabla f(\vett x^*)^t = 0 \qquad \Rightarrow \]
+	This relation does not give any information on the point if it's a minimum, a maximum or a saddle point and so a second order (or higher) derivative analyses is required.
+	
+	Assuming a function $f\in C^2(\R^n)$ (2 derivative continuos), if a point $\vett x^*\in R^n$ is a local minimum then $\nabla f(\vett x^*) = 0 $ and $\nabla^2 f(\vett x^*)$ is semi positive definite and so
+	\[ \vett d^t\nabla^2f(\vett x^*) \vett d \geq 0 \qquad \forall d \in \R^n \]
+	where $\nabla^2f(\vett x^*)$ is the hessian matrix of the function $f$. This condition (as the previous one) is necessary but not sufficient to determine if $\vstar x$ is a minimum or a saddle point. If the hessian is \textbf{positive defined}, so $ \nabla^2f(\vett x^*) > 0$, then the condition is also necessary and $\vstar x$ is a strict local minimum. In particular if the eigenvalues associated to $\nabla^2 f(\vstar x)$ are all positive, then the matrix is positive defined.
+	
+\section{Constrained minimization: Lagrange multipliers}
+	The problem now is not to minimize a function $f\in C^2(\R^n)$ in all it's domain, but while considering a number $m$ of constraints defined by equations $h_k\in C^2(\R^n)$, so solving a problem in the form:
+	\begin{align*}
+		\textrm{minimize:} \qquad & f(\vett x) \\
+		\textrm{with constraints}: \qquad & h_k(\vett x) = 0 \qquad k = 1,\dots, m
+	\end{align*}
+	
+	\paragraph{Lagrange multiplier} The hard analytical problem of the constrained minimization can be solved using the \de{theorem of the Lagrange multiplier}. Let's consider a function $f$ to be minimized with a constraints map $\vett h$ (such that $f,\vett h \in C^2(\R^n)$) and let $\vstar x$ a local minimum of $f$ and satisfies all the constraints (and so $\vett h(\vstar x) = \vett 0$) then if $\nabla \vett h(\vstar x)$ has maximum rank, then there exists $m$ scalar $\lambda_k$ such that
+	\begin{equation}
+		\nabla f(\vstar x) - \sum_{k=1}^{m} \lambda_k \nabla h_k(\vstar x) = 0
+	\end{equation}
+	
+	This problem reduces now to a form on where we need to compute the eigenvalues $\lambda_k$ of the \de{lagrangian} $\lag$ defined as 
+	\begin{equation}
+		\mathcal L (\vett x,\vett \lambda) := f(\vett x) - \sum_{k=1}^m \lambda_k h_k(\vett x) 
+	\end{equation}
+	In general the hardest part of the problem is determine all the points $\vstar x$ that satisfies the Lagrange multiplier conditions because that implies to solve a non linear system of equations that usually is very hard to explicitly express. However the second part of the problem is way much easier: we need in fact to compute the kernel (null space) of $\nabla \vett h(\vstar x)$ and, in order to have a local minimum, we have also to check that the matrix $\nabla_{\vett x} ^2\big(f(\vstar x) - \vett \lambda \, \vett h(\vstar x)\big)$ is semi positive defined. \vspace{3mm}
+	
+	Using the lagrangian definition, the constrained minimization problem can be reduced to the following system of equations:
+	\begin{equation}
+	\begin{cases}		
+		\nabla_{\vett x} \lag(\vett x,\vett \lambda) = \nabla_{\vett x} f(\vett x) - \lambda^t\, \nabla_{\vett x} \vett h(\vett x) = \vett 0 \\
+		\nabla_{\vett \lambda} \lag(\vett x, \vett \lambda) = \vett h(\vett x) = \vett 0
+	\end{cases}
+	\end{equation}
+	All the points $\vstar x$ that satisfies this system are candidates to be local maximum/minimum (in fact by computing the gradient and setting it to zero we are indeed searching for the stationary points of the lagrangian).\\
+	At this point to discriminate if the stationary point is maximum or minimum we have to use the second order conditions and in particular we must consider that the matrix $\nabla_{\vett x}^2 \lag(\vett x,\vett \lambda)$ is positive defined in the kernel of the constraints map $\vett h(\vett x)$, and so such that
+	\begin{equation}
+		\vett z^t \, \nabla_{\vett x}^2\lag(\vett x,\vett \lambda)\, \vett z > 0 \qquad \forall \vett z \in \ker\{ \nabla\vett h(\vstar x) \}
+	\end{equation}
+
+	\begin{example}{: constrained minimization problem}
+		Let's consider the problem on where we want to minimize the function $f:\R^2\rightarrow R$ using the constraint $h$ defined as
+		\[ f(x,y) = e^{x^2-y^2} \qquad,\qquad h(x,y) = x - y^2 \]
+		
+		In order to solve this problem we at first need to build the lagrangian (having only one constraint $\vett \lambda$ reduces to a scalar) and so
+		\[ \lag(x,y,\lambda) = e^{x^2-y^2} - \lambda \big(x-y^2\big) \]
+		We now need to compute the stationary points of the lagrangian and this means solving the following non linear system of equations:
+		\[ \begin{cases}
+			\nabla_x \lag(x,y,\lambda) = 2 x e^{x^2-y^2} - \lambda = 0 \\
+			\nabla_y \lag(x,y,\lambda) = -2 y e^{x^2-y^2} + 2 \lambda y = 0 \\
+			\nabla_\lambda \lag(x,y,\lambda) = -x + y^2 = 0 	
+		\end{cases} \]
+		\[ \Rightarrow \quad \big(x,y,\lambda\big) \quad  = \quad \left(0,0,0\right) , \left(\frac 1 2 , \frac 1 {\sqrt 2},e ^{-\frac 14}\right), \left(\frac 1 2 , -\frac 1 {\sqrt 2},e ^{-\frac 14}\right)\]
+		
+		To determine now it this points are local maximum or minimum we have to firstly define the general gradient of the constraint map and then the hessian of the Lagrangian in respect to the variable $\vett x =(x,y)$:
+		\begin{align*}
+			\nabla h(x,y) & = (1,-2y) \\
+			\nabla^2_{(x,y)} \lag & = \begin{bmatrix}
+				(4x^2+2)e^{x^2-y^2} & -4xy e^{x^2-y^2} \\
+				-4xy e^{x^2-y^2} & (4y^2-2)e^{x^2-y^2} + 2\lambda
+			\end{bmatrix}
+		\end{align*}
+		Now we have to check each stationary point independently:
+		\begin{enumerate}
+			\item when $x=y=\lambda = 0$ we have that $\nabla h = (1,0)$ while $\nabla^2_{(x,y)} \lag = \begin{bmatrix} 2 & 0 \\ 0 & -2 \end{bmatrix}$. By computing the null space of the vector $(1,0)$ we can see that all the vectors in the form $(0,\alpha)$ match the definition; we can now check if the point is of maximum/minimum be determining if the matrix $\nabla^2_{(x,y)} \lag$ is positive or negative defined:
+			\[ \big(0 \ \ \alpha\big) \begin{bmatrix} 2 & 0 \\ 0 & -2 \end{bmatrix} \begin{pmatrix}
+				0 \\ \alpha
+			\end{pmatrix} = -2\alpha^2 \leq 0 \qquad \forall \alpha\in \R \]
+			The hessian matrix is negative defined and so the point $(x,y) = (0,0)$ is a local maximum.
+			
+			\item evaluating for the second point $x = \frac 1 2$, $y = \frac{1}{\sqrt 2}$ and $\lambda = e^{-\frac 14}$ we can compute the gradient $\nabla h = (1, - \sqrt 2)$ of the constraint map that determines a null space of the form $(\alpha \sqrt 2,\alpha)$. Given the hessian matrix of the transform we can see that it's positive defined, in fact
+			\[ e^{-\frac 1 4} \begin{pmatrix}
+				\alpha \sqrt 2 & \alpha
+			\end{pmatrix} \begin{bmatrix}
+				3 & -\sqrt 2 \\ -\sqrt 2 & 2 
+			\end{bmatrix} \begin{pmatrix}
+				\alpha \sqrt 2 \\ \alpha
+			\end{pmatrix} = 4 e^{-\frac 12} \alpha^2 > 0 \qquad \forall \alpha \in \R \]
+			This means that the point is a local minimum.
+			
+			\item considering instead the last point $x = \frac 1 2$, $y = - \frac{1}{\sqrt 2}$ and $\lambda = e^{-\frac 14}$ we have a similar gradient $\delta h = (1,\sqrt 2)$ that determines a kernel in the form $(\alpha \sqrt 2,-\alpha)$. Evaluating the hessian on the null space base we can see that the matrix is positive defined, in fact
+			\[ e^{-\frac 1 4} \begin{pmatrix}
+				\alpha \sqrt 2 & -\alpha
+			\end{pmatrix} \begin{bmatrix}
+				3 & -\sqrt 2 \\ -\sqrt 2 & 2 
+			\end{bmatrix} \begin{pmatrix}
+				\alpha \sqrt 2 \\ -\alpha
+			\end{pmatrix} = 4 e^{-\frac 12} \alpha^2 > 0 \qquad \forall \alpha \in \R \]
+		\end{enumerate}
+		
+		We can see that the both points $\left(\frac 12, \frac 1{\sqrt 2}\right)$ and $\left(\frac 12, -\frac 1{\sqrt 2}\right)$ are local minimum and they are both also global minimum because we can see that $f\left(\frac 12, \frac 1{\sqrt 2}\right) = f\left(\frac 12, - \frac 1{\sqrt 2}\right) = e^{-\frac 1 4}$.
+	\end{example}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
