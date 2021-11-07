@@ -411,7 +411,7 @@
 		\begin{itemize}
 			\item in the first case when $x=y = \mu_1 = \mu_2 = 0$ the set of the active constraints is just the second inequality $g_2$: in fact we have that $g_1(0,0) = 1 \neq 0$ while $g_2(0,0) = 0$. In respect to this vector we have to compute it's kernel (to determine the direction $z$ on which verify the KKT condition) and in particular
 			\[ \nabla g_2(0,0) = \vector{0\\ 2} \qquad \Rightarrow \quad \ker\big\{ \nabla g_2(0,0) \} = \alpha \vector{1 \\ 0} \]
-			Evaluating the expression $\vett z^t \, \nabla_{\vett x}^2\lag \, \vett z$ for $z\in \ker{\nabla g_2}$ we obtain that
+			Evaluating the expression $\vett z^t \, \nabla_{\vett x}^2\lag \, \vett z$ for $\vett z\in \ker\{\nabla g_2\}$ we obtain that
 			\[ \alpha \vector{1 & 0} \matrix{ 2 & - 1 \\ - 1 & 2 } \vector{1 \\ 0} \alpha = 2\alpha^2  \]
 		\end{itemize}
 		
