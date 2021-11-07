@@ -190,19 +190,232 @@
 		\end{example}
 	
 	
+\section{Inequality constraints}
+	Let's introduce now the problem of minimizing a function $f(\vett x):\R^n\rightarrow R$ considering a set of $p$ inequalities constrains in the form $g_k(\vett x) \geq 0$.
+	\begin{align*}
+		\textrm{minimize:} \qquad & f(\vett x) \\
+		\textrm{subject to:}\qquad & g_k(\vett x) \geq 0 \qquad k = 1,\dots,p
+	\end{align*}
+	The first approach to this problem is by trying to transform the inequality constraints $g_k$ into equality one (so having $h_k(\vett x) = 0$). This can be done considering that each constraint can be expressed as
+	\[ g_k(\vett x) = \varepsilon_k^2 \geq 0 \qquad \Rightarrow h_k(\vett x,\varepsilon_k) = g_k(\vett x) - \varepsilon_k^2 = 0  \]
+	Doing this process for each constraint we can determine a minimization problem that depends both on the function variable $\vett x$ but also on the so called \textbf{slack variables} $\vett \varepsilon$:
+	\begin{align*}
+		\textrm{minimize:} \qquad & f(\vett x) \\
+		\textrm{subject to:}\qquad & h_k(\vett x, \vett \varepsilon) = 0 \qquad k = 1,\dots,p
+	\end{align*}
+	This kind of problem increases the computational costs because it increases the variable to minimize from $n$ to $n+p$.
+	\begin{note}
+		We used the expression $\varepsilon_k^2$ and not $\varepsilon_k$ because with this expression we don't need to specify one more inequality $\varepsilon_k \geq 0$.
+	\end{note}
+	\begin{example}{} \label{ex:min:inequ}
+		Let's consider the following problem:\begin{align*}
+			\textrm{minimize:} \qquad & f(x,y) = x^2 \\
+			\textrm{subject to:}\qquad & x^2+y^2\leq 1 \\ & x+y \geq 0
+		\end{align*}
+		In order to solve this problem we have to reduce the inequality constraints to equality ones; considering the first constraint, that has to be expressed in the form $g_1 \geq 0$ and so
+		\[ g_1(x,y) = 1 -x^2-y^2 \geq 0 \qquad \Rightarrow \quad h_1(x,y) = 1-x^2-y^2-\varepsilon_1^2 \]
+		At the same way it's possible to express the second inequality as the a constraint $h_2(x,y,\varepsilon_2) = x+y-\varepsilon_2^2$. With this expression being set the problem reduces to the form\begin{align*}
+			\textrm{minimize:} \qquad & f(x,y,\epsilon_1,\epsilon_2) = x^2 \\
+			\textrm{subject to:}\qquad & h_1(x,y,\epsilon_1,\epsilon_2) = 1- x^2 - y^2  - \epsilon_1^2 = 0 \\ & h_2(x,y,\epsilon_1,\epsilon_2) = x+y - \varepsilon_2^2 = 0
+		\end{align*}
+		With the problem this stated we can build the lagrangian that depend's on both the original variables $x,y$ but also the slack variables $\epsilon_1,\eps 2$ and so
+		\begin{align*}
+			\lag(\underbrace{x,y,\eps1,\eps2}_{\vett\epsilon},\underbrace{\lambda_1,\lambda_2}_{\vett\lambda}) &= f(\vett x) - \lambda_1 h_1(\vett x) - \lambda_2 h_2(\vett x) \\
+			& = x^2 - \lambda_1 \big( 1- x^2-y^2-\eps1^2 \big) - \lambda_2 \big( x+y-\eps2^2 \big)
+		\end{align*}
+		To find the local minimum point we can start using the first necessary condition of the lagrangian multiplier, so by determining all the stationary point such that $\nabla \lag = \vett 0$; in practise this means solving the following non linear system of 6 equations in 6 variables:
+		\[ \begin{cases}
+			\pd \lag x =& 2x -2\lambda_1x -\lambda_2  = 0 \\
+			\pd \lag y =& 2\lambda_1 y - \lambda_2  = 0\\
+			\pd \lag {\eps1} =& 2\lambda_1\eps 1  = 0 \\
+			\pd \lag {\eps2} =& 2\lambda_2 \eps 2  =  0 \\
+			\pd \lag {\lambda_1} =& x^2+y^2 + \eps 1 ^2-1  = 0 \\
+			\pd \lag {\lambda_2} =& x + y - \eps 2^2 = 0
+		\end{cases} \]
+		Solving minimization problems with inequality constraints can be tricky using the lagrangian multiplier method and so other algorithm (like the \kkt that's going to be explained) are usually preferred. However this kind of system can be solved by cases; considering in fact the second and third equations we can discriminate the solution considering the various combination when $\eps1,\eps 2$ are equal (or not) to zero.
+		
+		Considering for example the case $\eps 1 = \eps 2 = 0$ the non linear system reduces to the form
+		\[\begin{cases}
+			2x - 2\lambda_1 x - \lambda_2 = 0 \\ 
+			2\lambda_1 y - \lambda_2 = 0 \\
+			x^2+y^2-1 = 0 \\ 
+			x + y = 0 
+		\end{cases}\]
+		Considering that the first two expressions are linear in respect to $\lambda_1,\lambda_2$ it's possible to determine their value directly in terms of $x,y$:
+		\[ \lambda_1 = \frac{x}{y-x} \qquad \lambda_2 = 2 \frac{xy}{y-x} \]
+		Considering instead the last 2 equations we have a non linear system that can be also computed by cases; from the last equation we have in fact that $y = -x$ and so
+		\[ 1-x^2-x^2 = 0 \qquad \Rightarrow \quad x = \pm \frac{1}{\sqrt 2} \]
+		At this end of this process we defined 2 stationary points for the lagrangian:
+		\[ \big(x,y,\eps1,\eps2,\lambda_1,\lambda_2\big) \quad = \quad \left( \frac 1 {\sqrt 2} , - \frac{1}{\sqrt 2},0,0,-\frac 1 2, \frac{\sqrt 2}{2} \right) , \left( - \frac 1 {\sqrt 2} , \frac{1}{\sqrt 2},0,0,\frac 1 2, -\frac{\sqrt 2}{2} \right) \]
+		
+		Solving symbolically this system of equation with a computer the lonely real solution of the problem (that determines a local minimum) is expressed in the form
+		\[ \big(x,y,\eps1,\eps2,\lambda_1,\lambda_2\big) \quad = \quad \left( 0, \sqrt{-\eps1^2 + 1 }, \eps 1 ,\sqrt[4]{1 - \eps1^2}, 1, 1 \right) \]
+		In order for the square roots to exists the value $\eps 1^2$ should fit inside the range $[0,1]$ and so the local minimum of the problem can be found on the vertical line
+		\[ (x,y) = (0,k) \qquad k \in [0,1] \]
+		
+		
+	\end{example}
 	
 	
 	
+\section{Karush-Kuhn-Tucker conditions}
+	The \de{\kkt} (KKT) \de{conditions} are a set of necessary and sufficient conditions (first and second order) that allows to describe if a point $\vstar x$ is a minimum point of a minimization problem subjected to equality and inequality constraints, so for the problem
+	\begin{align*}
+		\textrm{minimize:} \qquad & f(\vett x) \\
+		\textrm{subject to:}\qquad  \ & h_k(\vett x) = 0 \qquad && k=1,\dots, m\\
+		& g_k(\vett x) \geq 0  &&k = 1,\dots,p
+	\end{align*}
+	where $f,h_k,g_k: \R^n\rightarrow \R$ are real evaluated function.
 	
+	In order to describe this conditions it's important to define \textbf{set of the active constraints} $\act$ as
+	\[ \act(\vstar x) = \big\{ k \ | \ g_k(\vstar x) = 0 \big\} \]
+	This means that given the constraints $g\in C(\R^n)$ it's defined as \textit{active} if it happens that the point $\vstar x$ is such that $g(\vstar x) = 0$, so in practical way it's in the \textit{border} between activating and not activating the constraints.
 	
+	\paragraph{First order necessary condition} Lef $f\in C^1(\R^n)$ a function to minimize subjected to the inequality $\vett g\in C^1(\R^n,\R^p)$ and equality $\vett h \in C^1(\R^n,\R^m)$ constraint maps. If $\vstar x$ satisfy constraint qualification then necessary condition for $\vstar x$ to be a local minima is that that exists $m+p$ scalars $\lambda_i,\mu_j$ such that all the following conditions are satisfied:
+	\begin{equation} \label{eq:min:kkt:firstnecessary}
+	\begin{aligned}
+		\nabla_{\vett x} \lag \big(\vstar x,\vstar \lambda,\vstar \mu\big) & = \vett 0 \\
+		h_k\big(\vstar x\big) & =  0 \qquad && k = 0,\dots, m\\
+		\mu_k^* g_k\big(\vstar x\big) & = 0 && k = 0,\dots, p \\
+		\mu_k^* & \geq 0 && k = 0,\dots,p
+	\end{aligned}
+	\end{equation}
+	where the lagrangian is in this case defined as
+	\[ \lag(\vett x,\vett \lambda,\vett \mu) = f(\vett x) - \sum_{k=1}^p \mu_k g_k(\vett x)  - \sum_{k=1}^m \lambda_k h_k(\vett x) \]
 	
+	\begin{example}{}
+		Solving minimization problem with the KKT conditions is generally more easier; considering the case of the minimization problem in example \ref{ex:min:inequ} the lagrangian will depend only on 4 parameter (instead of 6 as in that example):
+		\[ \lag(x,y,\mu_1,\mu_2) = x^2 - \mu_1\big(1-x^2-y^2\big) - \mu_2\big(x+y\big) \]
+		Using the first order KKT condition the main non linear system to solve is in the form
+		\[\left\{\begin{aligned}
+			\left. \begin{aligned}				
+				2x +2\mu_1x - \mu_2 &= 0 \\
+				2 \mu_1 y - \mu_2 &= 0
+			\end{aligned} \right\} & \quad \nabla_{\vett x} \lag\big(\vett x, \vett \lambda\big)  	\\		
+			\left. \begin{aligned}
+				\mu_1\big(1-x^2-y^2\big) & = 0 \\
+				\mu_2 \big(x+y\big) & = 0
+			\end{aligned} \right\} &  \quad \mu_k g_k\big(\vett x \big) = 0\\
+			\mu_1,\mu_2 \geq 0 \quad & 
+		\end{aligned} \right.\]
+		This system of four non linear equations (the conditions $\mu_1,\mu_2\geq0$ are \textit{easier} to consider) can be solved by cases:
+		\begin{itemize}
+			\item if $\mu_1 = \mu_2 = 0$ then the last two equalities are always verified, while the first two becomes
+			\[\begin{cases}
+				2x = 0 \\
+				0 = 0 
+			\end{cases}\]
+			this means that $x = 0$, while $y$ is a free parameter that must satisfy both the constraints $x+y\geq 0 $ (so that $y \geq 0$) and $1-x^2-y^2 \geq 0 $ (and so $1-y^2 \geq 0 $ that determines $-1 \leq y \leq 1$): considering both condition at the same time we have that
+			\[ \begin{cases}
+				y \geq 0 \\ -1 \leq y \leq 1 
+			\end{cases} \qquad \Rightarrow \quad \textrm{solution: } x = \mu_1 = \mu_2 = 0 \quad y \in [0,1]\]
+			
+			\item when considering $\mu_1 \neq 0$ and $\mu_2 = 0$ the system of equations become
+			\[\begin{cases}
+				2x + 2 \mu_1x = 0 \\
+				2\mu_1 y = 0 \\
+				\mu_1\big(1-x^2-y^2\big) = 0
+			\end{cases}\]
+			Based on the assumption of the value $\mu_1$, from the second equation we determine that $y$ must be equal to $0$ and so the third equation becomes $1-x^2 = 0$ whose solutions are $\pm 1$. Considering that the first equation can be factorised as $2x(1+\mu_1) = 0$ (and $x\neq 0$), then in order to satisfy the relation $\mu_1$ must be $-1$, but this imply that $\mu_1$ is negative and it's an unacceptable solution, so for $\mu_1 \neq 0,\mu_2=0$ no solutions of the system can be found;
+			
+			\item considering instead $\mu_1 = 0$ and $\mu_2 \neq 0$ the system becomes
+			\[ \begin{cases}
+				2x - \mu_2 = 0 \\ 
+				-\mu_2 = 0 \\
+				\mu_2(x+y) = 0
+			\end{cases} \]
+			The second equation states that $\mu_2$ must be equal to $0$ and so the solution of this problem is the same as the first case considered;
+			
+			\item considering both variables $\mu_1,\mu_2 \neq 0$ we have to solve the full systems; considering the last two equations we have that
+			\[ \begin{cases}
+				x+y = 0 \\ 1-x^2-y^2 = 0
+			\end{cases} \qquad \Rightarrow \quad x = -y \quad \Rightarrow \quad 1-2x^2 = 0\]
+			and so it means that the two possible solution for the systems are $(x,y) = \left( \pm \frac{1}{\sqrt{2}}, \mp \frac{1}{\sqrt{2}} \right)$. Considering the first case where $x = 1/\sqrt 2$ the first two equations become
+			\[ \begin{cases}
+				\frac{2}{\sqrt 2} (1+\mu_1) - \mu_2 = 0 \\
+				-\frac 2 {\sqrt 2} \mu_1 - \mu_2 = 0
+			\end{cases} \qquad \Rightarrow \quad \mu_2 = - \frac 2 {\sqrt 2} \mu_1 \]
+			\[ \Rightarrow \quad \frac{4}{\sqrt 2} \mu_1 + \frac{2}{\sqrt 2} = 0 \qquad \Rightarrow \quad \mu_1 = - \frac 1 2 \qquad \mu_2 = \frac 1 {\sqrt 2}   \]
+			In this case $\mu_1 < 0 $ is an unacceptable solution of the problem, and also considering the point $x = -1/\sqrt 2$ the system becomes with no considerable solutions
+			\[ \begin{cases}
+				-\frac{2}{\sqrt 2} (1+\mu_1) - \mu_2 = 0 \\
+				\frac 2 {\sqrt 2} \mu_1 - \mu_2 = 0
+			\end{cases} \qquad \Rightarrow \quad \mu_1 = -\frac 12\quad \mu_2 =  - \frac 1 {\sqrt 2}  \]			
+		\end{itemize}
+		With all this considerations done the point of local minimum relies on the points
+		\[ (x,y) = (0,k) \qquad k\in[0,1] \]
+	\end{example}
 	
+	\paragraph{Second order necessary conditions} Given a function $f \in C^1(\R^n)$ to minimize subject to the equality $\vett h\in C^1(\R^n,\R^m)$ and inequality $\vett g \in C^1(\R^n,\R^p)$ constraint maps, then necessary conditions for a point $\vstar x$ (that satisfies the constraints) to be a local minima is that exists $m+p$ scalars $\lambda_i,\mu_i$ such that satisfy the first order conditions (equation \ref{eq:min:kkt:firstnecessary}) and
+	\begin{equation}
+		\vett z^t \, \nabla^2_{\vett x} \lag\big(\vstar x,\vstar \lambda,\vstar \mu\big) \, \vett z \geq 0
+	\end{equation}	
+	for all vector $\vett z$ such that
+	\begin{align*}
+		i) \qquad && \nabla h_k(\vstar x) \vett z & = 0 && k = 1,\dots,m \\
+		ii) \qquad &&\nabla g_k(\vstar x) \vett z & = 0 && \textrm{for all } k\in \act(\vstar x) \textrm{ and } \mu_k > 0 \\
+		iii) \qquad &&\nabla g_k(\vstar x) \vett z & \geq 0 && \textrm{for all } k\in \act(\vstar x) \textrm{ and } \mu_k = 0
+	\end{align*}
+	In general the conditions $ii)$ and $iii)$ are hard to verify and so to have a less accurate necessary condition (by having a smaller set of possible vector $\vett z$), and so improving the chance of considering point that don't belong to the original domain, this two conditions can be substitute with the expression
+	\[ \nabla g_k(\vstar x) \vett z = 0 \qquad \textrm{for all } k \in \act(\vstar x) \]
 	
+	\paragraph{Second order sufficient conditions} Given a function $f \in C^1(\R^n)$ to minimize subject to the equality $\vett h\in C^1(\R^n,\R^m)$ and inequality $\vett g \in C^1(\R^n,\R^p)$ constraint maps, then sufficient condition for a point $\vstar x$ (that satisfies the constraints) to be a local minima is that exists $m+p$ scalars $\lambda_i,\mu_i$ such that satisfy the first order conditions (equation \ref{eq:min:kkt:firstnecessary}) and 
+	\begin{equation}
+		\vett z^t \, \nabla^2_{\vett x} \lag\big(\vstar x,\vstar \lambda,\vstar \mu\big) \, \vett z > 0
+	\end{equation}	
+	for all vector $\vett z$ such that
+	\begin{align*}
+		i) \qquad && \nabla h_k(\vstar x) \vett z & = 0 && k = 1,\dots,m \\
+		ii) \qquad &&\nabla g_k(\vstar x) \vett z & = 0 && \textrm{for all } k\in \act(\vstar x) \textrm{ and } \mu_k > 0 \\
+		iii) \qquad &&\nabla g_k(\vstar x) \vett z & \geq 0 && \textrm{for all } k\in \act(\vstar x) \textrm{ and } \mu_k = 0
+	\end{align*}
+	As in the previous case in order to have simpler calculation the third equation $iii)$ can be dropped (and so we obtain less accurate solution of the local minima).
 	
-	
-	
-	
-	
+	\begin{example}{}
+		\begin{align*}
+			\textrm{minimize:}&&   f(x,y) &= x^2 - xy \\
+			\textrm{subject to:}&& g_1(x,y) &=  1-x^2-y^2 \geq 0 \\ 
+					&& g_2(x,y) &=  1- (x-1)^2-y^2 \geq 0
+		\end{align*}
+		To solve this kind of problem using the KKT conditions we firstly need to build the lagrangian of the problem that's equal to
+		\[ \lag(x,y,\mu_1,\mu_2) = x^2-xy - \mu_1 \big(1-x^2-y^2\big) - \mu_2 \big[ 1- (x-1)^2 - y^2 \big] \]
+		At this point it's possible to construct the non linear system of equation whose solution are the stationary points candidate to be local minimum:
+		\[\left\{\begin{aligned}
+			\left. \begin{aligned}				
+				2x - y +2\mu_1 x + 2\mu_2(x-1) &= 0 \\
+				-x + 2 \mu_1 y +2 \mu_2 y &= 0
+			\end{aligned} \right\} & \quad \nabla_{\vett x} \lag\big(\vett x, \vett \lambda\big)  	\\		
+			\left. \begin{aligned}
+				\mu_1 \big(1-x^2-y^2\big) & = 0 \\
+				\mu_2 \big[ 1- (x-1)^2 - y^2 \big] & = 0
+			\end{aligned} \right\} &  \quad \mu_k g_k\big(\vett x \big) = 0\\
+			\mu_1,\mu_2 \geq 0 \quad & 
+		\end{aligned} \right.\]
+		This system can be solved by cases of the value of $\mu_i$ and in particular
+		\begin{itemize}
+			\item when $\mu_1 = \mu_2 = 0$ the system reduces to the form
+			\[ \begin{cases}
+				2x - y = 0 \\ - x = 0
+			\end{cases}  \qquad \Rightarrow \quad x = y = 0 \]
+			This solution satisfy the constraints, in fact $g_1(0,0) = 1 \geq 0$ and $g_2(0,0) = 0 \geq 0$, so this point can be used to compute the second order conditions;
+			
+			\item considering all the other cases of $\mu_j$ the only other analytical solution to the system, found with \texttt{Mathematica}, determines the point
+			\[ (x,y,\mu_1,\mu_2) = \left( \frac 1 2, \frac{\sqrt 3}{2}, \frac 1{\sqrt 3} - \frac 12 , \frac 1 2 - \frac{\sqrt 3}{6} \right) \]			
+		\end{itemize}
+		In order to consider now the second order necessary/sufficient conditions we have firstly to evaluate the gradient $\nabla \vett g$ of the inequality constraint map (in respect to the variables $x,y$) resulting in the matrix
+		\[ \nabla \vett g = \matrix{ -2x & -2y \\ -	2(x-1) & -2y^2 }\]
+		For the second order conditions is also important to define the hessian matrix of the lagrangian respect to the variables $x,y$:
+		\[ \nabla_{\vett x}^2 \lag = \matrix{ 2 + 2\mu1 + 2 \mu2 & -1 \\ -1 & 2\mu_1 + 2\mu_2 }  \]
+		
+		We have now to check the conditions for the two local minima candidates:
+		\begin{itemize}
+			\item in the first case when $x=y = \mu_1 = \mu_2 = 0$ the set of the active constraints is just the second inequality $g_2$: in fact we have that $g_1(0,0) = 1 \neq 0$ while $g_2(0,0) = 0$. In respect to this vector we have to compute it's kernel (to determine the direction $z$ on which verify the KKT condition) and in particular
+			\[ \nabla g_2(0,0) = \vector{0\\ 2} \qquad \Rightarrow \quad \ker\big\{ \nabla g_2(0,0) \} = \alpha \vector{1 \\ 0} \]
+			Evaluating the expression $\vett z^t \, \nabla_{\vett x}^2\lag \, \vett z$ for $z\in \ker{\nabla g_2}$ we obtain that
+			\[ \alpha \vector{1 & 0} \matrix{ 2 & - 1 \\ - 1 & 2 } \vector{1 \\ 0} \alpha = 2\alpha^2  \]
+		\end{itemize}
+		
+	\end{example}
 	
 	
 	
