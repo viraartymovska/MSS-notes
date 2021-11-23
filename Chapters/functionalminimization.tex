@@ -83,11 +83,20 @@
 	\[ g(\tau) = \fun F\big(z(\cdot,\tau)\big) = \fun F\big(x^* + \tau \, d\cdot\big) \]
 	In this case $g:\R\rightarrow \R$ can be easily analysed and with the original assumptions done than $g(0) = \mathcal F(x^+) \leq g(\tau) = \fun F(x^++ \tau \, d\cdot)$. Then if $g'(0)$ exists, it means that
 	\begin{align*}
-		g'(0) & =\frac{asd}{denominatore}
+		g'(0) & \lim_{t\rightarrow 0} \frac{g(t)-g(0)}{t} \geq 0
 	\end{align*}
-	\textbf{RISCRIVERE QUESTA ESPRESSION}
-	
-	The conclusion of the process it that if $x^*$ is a \textit{minimum point}, then every directional derivative of $x^*$ is equals to 0. While performing this operation we have to consider that each  generated function $x^++\tau\, d\cdot$ must be \textit{feasible}.
+
+	If we also consider that $f(x,y)$ is a function that has a Taylor series as
+	\[ f\big(x\s + t\, dx,y\s+t\, dy\big) = f\big(x\s,y\s\big) + \nabla f\big(x\s,y\s\big) \vector{t\, dx \\ t \, dy} + \mathcal O(t^2) \]
+	and that we can relate
+	\begin{align*}
+		\frac{g(t)-g(0)}{t} & = \frac{f\big(x\s + t\, dx,y\s+t\, dy\big) - f\big(x\s,y\s\big)}{t} \\& = \nabla f\big(x\s,y\s\big) \vector{dx \\ dy} + \mathcal O(t^2) \geq 0
+	\end{align*}
+	If we now choose as direction to compute the derivative the opposite one of the gradient, and so $\vett d = - \nabla f(x\s,y\s)^t$ we have that
+	\[ \nabla f(x\s,y\s) \Big(-\nabla f(x\s,y\s)\Big)^t = - \|\nabla f(x\s,y\s)\|^2 \geq 0 \]
+	and so this implies that the derivative $\nabla f(x\s,y\s)$ is necessarily zero.
+	000
+	The conclusion of the process it that if $x^*$ is a \textit{minimum point}, then every directional derivative of $x^*$ is equals to 0. While performing this operation we have to consider that each  generated function $x\s+\tau\, d\cdot$ must be \textit{feasible}.
 	
 	
 	\begin{example}{}
@@ -100,7 +109,9 @@
 	
 \section{Fundamental lemma of the calculus of variations}
 	{\itshape Given a function $f:[a,b]\rightarrow \R$ (piecewise continuous) such that for all $g:[a,b] \rightarrow \R, g \in C^\infty([a,b])$ with $g(a) = g(b) = 0$ and $g^{(k)}(a) = g^{(k)}(b) = 0 \ \forall k$, if the integral 
-	\[ \int_a^b f(x)\,g(x) \, dx = 0 \]
+	\begin{equation} \label{eq:func:lemma}
+		\int_a^b f(x)\,g(x) \, dx = 0
+	\end{equation}
 	then $f(x)= 0 $ is identically null. }
 
 	\paragraph{Lemma: sign permanence} In order to later proof the fundamental lemma yet described, we have to remark the \textit{sign permanence} that states: {\itshape given a function $f:[a,b]\rightarrow \R$ continuous such that $f(c) >0$, then there exists a $\delta >0$ such that }
@@ -131,7 +142,7 @@
 			0 & t\leq 0
 		\end{cases}
 	\end{equation}
-	\begin{SCfigure}[2][b]
+	\begin{SCfigure}[2][bt]
 		\centering \includegraphics[width=4cm]{cinf-a}
 		\caption{representation of $h(t)$ defined in equation \ref{eq:func:ht}}.
 		\label{fig:func:ht}
@@ -155,23 +166,44 @@
 	because $g(x)$ is always greater or equal to zero, determining a non zero value as result as in the previous case.
 	
 \section{Euler Lagrange equation}
-	The \de{Euler Lagrange equation} is the generalization of the minimum action principle that's used in physics. Considering as a practical example the motion of a pendulum of a mass $m$ that's free to oscillate in respect to a pivot point using a rope of length $l$, the kinetic energy $T$ and the potential term $V$ of the system can be expressed as
+	\paragraph{Pendulum example} The \de{Euler Lagrange equation} is the generalization of the minimum action principle that's used in physics. Considering as a practical example the motion of a pendulum of a mass $m$ that's free to oscillate in respect to a pivot point using a rope of length $l$, the kinetic energy $T$ and the potential term $V$ of the system can be expressed as
 	\[ T = \frac 1 2 m v^2 \qquad \qquad \qquad V = mgy \]
 	Considering $\theta$ as the angle that the rope determines with the vertical axis, then the we can rewrite the energies as functions of the angular position $\theta$ and velocity $\dot \theta$ as
 	\[ T(\theta,\dot \theta) = \frac 1 2 m l^2 \dot\theta^2 \qquad \qquad \qquad V(\theta) = - m gl\sin\theta \]
 	
 	To solve the dynamic equation $\theta(t)$ of the mechanism we can compute the lagrangian $\mathcal L$ of the system defined as
 	\[ \mathcal L(\theta,\dot\theta) = T(\theta,\dot\theta)-V(\theta) = \frac m 2 l^2\dot\theta^2 + lmg\cos\theta \]
-	As law that's analysed in mechanics physics we can state that the solution of the dynamics of the system is the one the function that minimize the \textbf{action} $\mathcal A$ of the system defined as
-	\[ A(\theta) = \int_{t_0}^{t_1} \mathcal L(\theta,\dot\theta)\, dt \]
+	As law that's analyzed in mechanics physics we can state that the solution of the dynamics of the system is the one the function that minimize the \textbf{action} $\mathcal A$ of the system defined as
+	\begin{equation} \label{eq:func:action}
+		A(\theta) = \int_{t_0}^{t_1} \mathcal L(\theta,\dot\theta)\, dt
+	\end{equation}
 	where the values $\theta(t_0)= \theta_0$ and $\theta(t_1)=\theta_1$ are known parameters.
 	
+	In practice to determine the required solution we can use analytical tool to find the trajectory that can then be demonstrated to be the minimum of the action $\mathcal A$ (that's indeed a functional).
 	
+	However we can also try to analytically determine the function $\theta^*(t)$ that minimize the functional $\fun A(\cdot)$ by computing the directional derivatives. \vspace{3mm}
 	
+	Let now consider the function $\theta\s(t)$ and a direction $\delta_\theta$ that satisfy $\delta_\theta(t_0)=\delta_\theta(t_1) = 0$, we can then use the fundamental lemma of the calculus of variation to determine the minimal function (considering that the expression \ref{eq:func:action} of the action is comparable to equation \ref{eq:func:lemma} of the lemma).\\
+	To determine the minimum point we have in fact to determine the function whose derivative is zero for each direction of approach to the point, and so in this example we need to compute
+	\begin{align*}
+		\frac{d}{d\alpha} \mathcal A\big(\theta\s + \alpha\, \delta_\theta\big) & = \frac{d}{d\alpha}\int_{t_0}^{t_1} \mathcal L \big( \theta \s + \alpha\, \delta_\theta, \dot\theta\s + \alpha\, \dot \delta_\theta \big) \\
+		& = \int_{t_0}^{t_1} \left[\pd{}{\theta} \mathcal L( \dots ) \frac{d}{d\alpha}\big(\theta\s + \alpha \,\delta_\theta\big) +\pd{}{\dot\theta} \mathcal L (\dots) \frac{d}{d\alpha}\big(\theta\s + \alpha \,\dot \delta_\theta\big) \right]\, dt \\
+		& = \int_{t_1}^{t_2} \left[ \big(-lmg\sin(\theta\s + \alpha\, \delta_\theta)\big)\delta_\theta + ml^2\big(
+		\dot\theta\s + \alpha \, \dot\delta_\theta^2 \big)\, \dot\delta_\theta \right] \, dt
+	\end{align*}
+	Note that from in the first step we made the implicit assumption that $ \frac d{d\cdot} \int = \int\frac{d}{d\cdot}$ while however this is not always possible. Evaluating the previous expression for $\alpha = 0$ we can state that
+	\[ 	\frac{d}{d\alpha} \mathcal A\big(\theta\s + \alpha\, \delta_\theta\big) \Big|_{\alpha = 0} = \int_{t_0}^{t_1} \big(-lmg \sin\theta\s\delta_\theta + ml^2\dot\theta\s \dot\delta_\theta \big) \, dt = 0 \qquad \forall \delta_\theta \]
+	Performing an integration by part allows to remove the term $\dot\delta_\theta$ that's hard to determine, and in fact
+	\[ \frac{d}{dt}\big( ml^2\dot\theta\s \, \delta_\theta\big) = \frac{d}{dt}\big(ml^2\dot\theta\s\big)\,\delta_\theta + ml^2\theta^{*2} \dot\delta_\theta\]
+	\begin{align*}
+		\Rightarrow \quad \left. \frac{d\mathcal A}{d\alpha}\right|_{\alpha = 0} & = \int_{t_0}^{t_1} \text{\textbf{RISCRIVERE}} \\
+		& = \int_{t_0}^{t_1} \underbrace{\left[ -lmg \sin\theta\s - \frac d{dt}\big(ml \dot\theta^{*2}\big) \right]}_{f(t)} \delta_\theta\, dt = 0
+	\end{align*}
+	We can now see in this formulation that the marked expression represent the function $f$ of the fundamental lemma considering that the relation must be true for all approaching direction $\delta_\theta$, and so it must be
+	\[ -lmg \sin\theta\s - \frac d{dt}\big(ml \dot\theta^{*2}\big) = 0 \]
+	The problem now to complete the analyses of the pendulum motion is determining the function $\theta\s(t)$ that satisfy this expression and also match the boundary conditions $\theta(t_0) = \theta_0$ and $\theta(t_1)=\theta_1$.000
 	
-	
-	
-	
+\subsection{General formulation}
 	
 	
 	
