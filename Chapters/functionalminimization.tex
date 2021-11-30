@@ -2,7 +2,10 @@
 	
 	A classical problem in minimization is the brachistrochrone, so the fastest ultimate curve (meaning determining the fastest trajectory to move from a point $A$ to a point $B$ considering that the only action is the one of the gravity).
 	
-	\textbf{MAGARI FARE LA FIGURA}
+	\begin{SCfigure}[3][bht]
+		\centering \includegraphics[width=2.5cm]{brachi}
+		\caption{example of two trajectories $\gamma_1,\gamma_2$ that an object can follow for moving from point $A$ to $B$.}
+	\end{SCfigure}
 	
 	Mathematically the problem is determining the curve $\mathcal C: [a,b] \rightarrow \mathds R$ such that $\mathcal C(a) = y_a$ and $\mathcal C(b) = y_b$ that minimize the function $T(\mathcal C)$ representing the time to travel and so
 	\[ \textrm{minimize } T(\mathcal C) \qquad \textrm{for all possible curves } \mathcal C \]
@@ -254,7 +257,7 @@
 	\[ -lmg \sin\theta\s - \frac d{dt}\big(ml^2 \dot\theta\s\big) = 0 \]
 	The problem now to complete the analyses of the pendulum motion is determining the function $\theta\s(t)$ that satisfy this expression and also match the boundary conditions $\theta(t_0) = \theta_0$ and $\theta(t_1)=\theta_1$.
 	
-\subsection{General formulation}
+\subsection{General formulation} \label{sec:func:eullag}
 	Given a functional
 	\begin{equation}
 		\mathcal A(x) = \int_a^b \mathcal L\big(x(t),x'(t),t\big)\, dt
@@ -278,7 +281,7 @@
 		& = \int_a^b \left[ \pd{\mathcal L(x,x',t)}{x} - \frac{d}{dt} \left( \pd{\mathcal L(x,x',t)}{x'} \right) \right] \delta_x\, dt + \cancel{\left. \left[ \pd{\mathcal L(x,x',t)}{x'}\delta_x \right] \right|_{\delta_x = a}^b} \\
 	\end{align*}
 	We can now see that the condition to have a minimum for the functional $\mathcal A$, by using the fundamental lemma of calculus of variation, is requiring that the function $f$ defined as follows is identically null:
-	\begin{equation}
+	\begin{equation} \label{eq:func:var1}
 		\left. \frac{d\mathcal A(x+\alpha\, \delta_x)}{d\alpha} \right|_{\alpha = 0} = \int_a^b \underbrace{\left(\pd{\mathcal L}{x} - \frac d{dt}\pd{\mathcal L}{x'}\right)}_{=f} \delta_x \, dt = 0
 	\end{equation}
 	
@@ -314,7 +317,9 @@
 
 \subsection*{Extended definition}
 	Considering now the functional $\mathcal B$ defined as
-	\[ \mathcal B(x) = \int_a^b \mathcal L(x(t),x'(t),x''(t),t)\, dt \]
+	\begin{equation} \label{eq:func:lag2}
+		\mathcal B(x) = \int_a^b \mathcal L(x(t),x'(t),x''(t),t)\, dt
+	\end{equation}
 	the problem to solve now is the minimization of $\mathcal B(x)$ for all the function $x\in \mathds V$ where the functional space is defined as
 	\[ \mathds V = \left\{ x \textrm{ such that } \begin{aligned}
 		& x\in C^4([a,b]) \\ & x(a) = x_a, x'(a) = x_a', x(b) = x_b, x'(b) = x_b'
@@ -334,17 +339,240 @@
 	\[ \frac d{dt} \left(\pd{\mathcal L}{x'}\, \delta_x \right) = \frac d{dt} \pd{\mathcal L}{x'} \delta_x + \pd{\mathcal L}{x'} \delta_x' \qquad \qquad \frac d{dt} \left(\pd{\mathcal L}{x''}\, \delta_x' \right) = \frac d{dt} \pd{\mathcal L}{x''} \delta_x' + \pd{\mathcal L}{x''}\delta_x''  \]
 	and so with that said the derivative becomes
 	\begin{align*}
-		\delta \mathcal B& = \int_a^b \left( \pd{\mathcal L}{x}\delta_x + \cancel{\frac d{dt} \pd{\mathcal L}{x'} \delta_x } -  \frac{d}{dt} \pd{\mathcal L}{x'} \delta_x + \cancel{\frac d{dt} \pd{\mathcal L}{x''} \delta_x' } - \frac{d}{dt} \pd{\mathcal L}{x''} \delta_x' \right)\, dt \\
+		\delta \mathcal B& = \int_a^b \left( \pd{\mathcal L}{x}\delta_x + \cancel{\frac d{dt} \left(\pd{\mathcal L}{x'} \delta_x \right)} -  \frac{d}{dt} \pd{\mathcal L}{x'} \delta_x + \cancel{\frac d{dt}\left( \pd{\mathcal L}{x''} \delta_x' \right) } - \frac{d}{dt} \pd{\mathcal L}{x''} \delta_x' \right)\, dt \\
 		& = \int_a^b \left[\left( \pd{\mathcal L}{x}  -  \frac{d}{dt} \pd{\mathcal L}{x'} \right)\delta_x - \frac{d}{dt} \pd{\mathcal L}{x''} \delta_x' \right]\, dt
 	\end{align*}
+	In the first line the terms are cancelled because if evaluated singularly we can see that they become in the form
+	\[ \int_a^b \frac d{dt} \left(\pd{\mathcal L}{x'} \delta_x\right) \, dt = \left. \left[ \pd{\mathcal L}{x'} \delta_x \right]\right|_a^b \xrightarrow{\delta_x(a) = \delta_x(b) = 0} 0  \]
+
 	To finish the analysis of the derivation we have to consider one last integration by part for the element
 	\[ \frac{d}{dt} \left( \frac{d}{dt} \pd{\mathcal L}{x''} \delta_x \right) = \frac{d^2}{dt^2} \pd{\mathcal L}{x''} \delta_x + \frac{d}{dt} \pd{\mathcal L}{x''} \delta_x' \]
-	\begin{equation}
+	\begin{equation} \label{eq:func:var2}
 		\Rightarrow \qquad \delta\mathcal B(x) = \int_a^b \underbrace{\left( \pd{\mathcal L}{x} - \frac d {dt} \pd{\mathcal L}{x'} + \frac{d^2}{dt^2} \pd{\mathcal L}{x''} \right)}_{=f} \delta_x\, dt
 	\end{equation}
 	Using so the fundamental lemma of calculus of variation in order to determine the function $x$ that minimize the functional $\mathcal B$ we need to solve the system of differential equation
-	\[   \pd{\mathcal L}{x} - \frac d {dt} \pd{\mathcal L}{x'} + \frac{d^2}{dt^2} \pd{\mathcal L}{x''} \]
-	subjected to the the boundary condition as initially defined.	
+	\[   \pd{\mathcal L}{x} - \frac d {dt} \pd{\mathcal L}{x'} + \frac{d^2}{dt^2} \pd{\mathcal L}{x''} = 0  \]
+	subjected to the the boundary conditions initially defined.		
+	
+	\begin{example}{: minimization of a functional with the Euler-Lagrange  method} \label{es:func:eullagmeth}
+		Let's consider the problem 
+		\begin{align*}
+			\textrm{minimize:}& \qquad \int_a^b \Big( \big(x''\big)^2 - x^2 + t \Big)\,dt \\
+			\textrm{with:}& \qquad x(a) = 0, x'(a) = 1 \quad x(b) = 1, x'(b) = 2
+		\end{align*}
+		In this case the function to minimize is $\mathcal L(x,x',x'',t) = (x'')^2 - x^2+t$ and all the boundaries conditions are well defined. In this case to calculate the variation of the functional $\mathcal A(x) = \int_a^b \mathcal L(x,x',x'',t)\, d$ by using equation \ref{eq:func:var2}:
+		\[ \delta \mathcal A = \int_a^b \left( -2x - 0 + \frac{d^2x''}{dt^2} \right) \delta_x\, dt \]
+		
+		Using the fundamental lemma of calculus of variation the terms in the bracket must be always equal to zero: this so represent, in conjunction with the boundary conditions, the ordinary differential equation that has to be solved to determine the solution of the problem:
+		\[ \begin{cases}
+			x^{(4)} - 2x = 0 \\
+			 x(a) = 0, x'(a) = 1 \\ x(b) = 1, x'(b) = 2
+		\end{cases} \]	
+		As we can see the differential equation is of order 4 and having 4 boundary condition and so it's possible to compute the solution.
+	\end{example}
+	
+\subsection{Boundary conditions} 
+	Until now we considered minimization problems with all boundary conditions values set, while however this might not always be the case: equation \ref{eq:func:var2} in fact is derived in the assumption of having all the variation constants $\delta_x = \delta_x^{(k)} = 0$ ($\forall k$), but when this won't happens the general equation becomes
+	\begin{align*}
+		\delta \mathcal B=& \int_a^b \left( \pd{\mathcal L} x - \frac d{dt}\pd{\mathcal L}{x'} + \frac{d^2}{dt^2}\pd{\mathcal L}{x''} \right) \delta_x\, dt + \left[ \left( \pd{\mathcal L}{x'} - \frac d{dt} \pd{\mathcal L}{x''} \right) \delta_x \right]_a^b + \left[ \left(-\pd{\mathcal L}{x''} \right) \delta_x' \right]_a^b \\
+		= & \int_a^b A\delta_x\, dt + B \delta_x(b) - C\delta_x(a) + D \delta_x'(b) - E \delta_x'(a)
+	\end{align*}
+	In this case if we consider that the boundary conditions fixed are only the one
+	\[ x(a) = x_a \qquad x'(b) = x_b' \]
+	this also reflect on the functional domain of the variations $\delta_x\in \mathds D$ that becomes
+	\[ \tilde {\mathds D} = \left\{ \delta_x\in C^{\infty}([a,b]) \textrm{ such that } \delta_x(a) = \delta_x'(b) = 0 \right\} \]
+	We can now see that in general the domain $\mathds D$ of the variation set condition for value of the function (and it's derivative) on points only where the boundary conditions are defined. In the case described considering the values fixed it means that the solution for the minimum is the one that satisfies:
+	\begin{equation} \label{eq:func:bcond}
+		\delta\mathcal B = \int_a^b A \delta_x\, dt + B \delta_x(b) - E\delta_x'(a)  \qquad \qquad \forall \delta_x \in \tilde{\mathds D}
+	\end{equation}
+	In this case we have 2 boundary degrees of freedom for the variation that we can define $\delta_x(b) = \delta_{xb}$ and $\delta_{x}'(a) = \delta_{xa}'$ (that are real evaluated variable); the simplest function that we might determine in order to create a variation $\delta_x(t)$ is a polynomial function depending on this parameters, and so
+	\[ \delta_x(t) = \delta_{xa}' (t-a) + \frac{ 2\delta_{xa}'(a-b) + 3 \delta_{xb}  }{(a-b)^2} \big( t-a \big)^2 + \frac{ \delta_{xa}'(a-b) + 2 \delta_{xb} }{(a-b)^3} \big(t-a\big)^3  \]
+	
+	Considering that the Gateaux derivative $\delta \mathcal B$ should always be zero for each function $\delta_x(t)$ in it's domain, we can consider the special function with parameters  $\delta_{xb} = 1$ and $\delta_{xa}' = 0$ becoming
+	\[ \delta_x(t) = \frac 3{(a-b)^2}\big(t-a\big)^2 + \frac 2{(a-b)^3} \big(t-a\big)^3\]
+	Considering now that $\delta_x'(a) = 0$ we can see that in expression \ref{eq:func:bcond} the terms $E$ is free and in order to have a null derivative it must be that 
+	\[ B = \left. \left[ \pd{\mathcal L}{x'} - \frac d {dt} \pd{\mathcal L}{x''} \right] \right|_b = 0 \]
+	
+	Similarly we can create a particular polynomial (in particular considering $ \delta_{xb} = \delta_x(b) = 0$ and $\delta_{xa}' = 1$) that set to zero the coefficients associated to $B$ (and so leaving it \textit{free} to change) and so, to have a zero evaluated derivative, it must be that
+	\[ E = - \left. \pd{\mathcal L}{x''} \right|_a = 0 \] 
+	In this case the differential equation associated to the terms $B,E$ are called \de{trasversality conditions} and are necessary when the boundary conditions of the problem are not enough (in fact that expressions are evaluated at precise point on the \textit{boarder} of the domain). At this point the solution of the original problem becomes
+	\[ \begin{cases}
+		\dfrac{\partial \mathcal L}{\partial x} - \dfrac{d}{dt} \dfrac{\partial \mathcal L}{\partial x'} + \dfrac{d^2}{dt^2} \dfrac{\mathcal L}{\partial x''} = 0 \\
+		\left.\dfrac{\partial \mathcal L}{\partial x'} \right|_b - \left. \dfrac{d}{dt} \dfrac{\partial \mathcal L}{\partial x''} \right|_b = 0\\
+		-\left. \dfrac{\partial \mathcal L}{\partial x''} \right|_a = 0 \\
+		x(a) = x_a, \ x'(b) = x_b'
+	\end{cases} \]
+
+	\begin{example}{: minimization with less boundary conditions}
+		Let's consider the problem of minimizing the functional $\mathcal A$ as in example \ref{es:func:eullagmeth} where the boundary conditions in this case are only
+		\[ x(a) = 0 \qquad \qquad x'(b) = 2  \]
+		In this case the boundary conditions are not enough and the case is similar to the theory yet described: in this case the domain of the variations $\delta_x$ is described as
+		\[ \mathds D = \left\{ \delta_x\in C^\infty([a,b]) \textrm{ such that } \delta_x(a) =\delta_x'(b) = 0 \right\} \]
+		No information are set for the values $\delta_x(b), \delta_x'(a)$ that are so \textit{free} to have different values in $\R$ and this determines two trasverality conditions that are
+		\[ \left.\dfrac{\partial \mathcal L}{\partial x'} \right|_b - \left. \dfrac{d}{dt} \dfrac{\partial \mathcal L}{\partial x''} \right|_b = 0-2x'''\Big|_b = -2x'''(b) = 0 \]\[ -\left. \dfrac{\partial \mathcal L}{\partial x''} \right|_a = - \big(-2x''\big)\Big|_a = 2x''(a) = 0   \]
+		
+		This in conjunction with the differential equation determined by the function $f$ in the integral and the known boundary conditions determines the following ordinary system of equation that's the solution that minimize the functional:
+		\[ \begin{cases}
+			x^{(4)} - 2x = 0 \\
+			x'''(b) = 0 \\ x''(a) = 0 \\
+			x(a) = 0, x'(b) = 2
+		\end{cases} \]		
+	\end{example}
+	
+	\begin{example}{: minimization of a functional}
+		Let's consider the problem
+		\begin{align*}
+			\textrm{minimize:}& \qquad \mathcal A(y) = \int_0^1 \left( \frac{\big(y'(x)\big)^2}{2} + y(x)y'(x) + y(x) \right)\, dx \\
+			\textrm{with:}& \qquad y(1) = 1
+		\end{align*}
+		In this case the lagrangian of the problem is defined as $\mathcal L(y,y',x) = (y')^2/2 + y y' + y$; as formulated from page \pageref{sec:func:eullag} the Gateaux derivative of this functional so becomes
+		\[ \delta \mathcal A = \int_0^1 \left( \pd{\mathcal L}{y} - \frac{d}{dx} \pd{\mathcal L}{y'} \right)\delta_y\, dx + \left. \left[ \pd{\mathcal L}{y'} \delta_y\right] \right|_{x = 0}^1 = 0 \]
+		To formally compute the derivative we firstly need to define the domain of the variation $\delta_y$ that, having only one boundary condition, is
+		\[ \mathds D = \{ \delta_y \in C^\infty([0,1]) \textrm{ with } \delta_y(1) = 0\} \]
+		At this point the Gateaux derivative can be computed as
+		\begin{align*}
+			\delta \mathcal A & = \int_0^1 \underbrace{\left( y' - (y'' - y') \right) }_{=f} \delta_y \, dx + \Big[ \big(y'+y\big) \delta_y \Big]_0^1 \\
+			& = \int_0^1 -y'' \delta_y\, dx - \underbrace{\big(y'+y\big)\delta_y(0)}_\textrm{trasv. cond.}
+		\end{align*}
+		As we can see we have that the term $f$ (that's $y''$) has to be zero for the fundamental lemma and so represent the differential equation associated to the solution, while the second term $y'+y$ evaluated for $x = 0$ represent the trasverality condition that allow to have a unique solution of the system of ordinary differential equation that is:
+		\[ \begin{cases}
+			y''(x) = 0 \\ 
+			y'(0) + y(0) = 0 \\
+			y(1) = 1
+		\end{cases} \]
+		By integration of the first differential equation we can determine the parametric solution of the system whose coefficients can be matched considering the boundary conditions:
+		\[ y(x) = c_1x + c_2 \]
+		Substituting the parametric solution on the boundary conditions we can solve for the parameters:
+		\[ \begin{cases}
+			c_1 + \cancel{0c_1} + c_2 = 0 \\ c_1+c_2 = 1
+		\end{cases} \]
+		In this case the system of linear equation has no solution (in fact we have that $c_1 + c_2 = 0 \neq 1$) and so this means that the functional $\mathcal A$ cannot be minimized.
+	
+	\end{example}
+	
+\section{Functional minimization with constraints}
+	Let's consider the problem of the minimization of a functional $\mathcal F$ subjected to an inequality constraints \textit{at the boarder} as follows:
+	\begin{equation} \label{eq:func:origconst}
+	\begin{aligned} 
+		\textrm{minimize:}& \qquad \mathcal F(z) = \int_a^b \mathcal L(z,z',t)\, dt \\
+		\textrm{subject to:}& \qquad w\big(z(a),z(b) \big) = 0
+	\end{aligned}
+	\end{equation}
+
+	In this case we want to find the solutions for the function $z(t)$ in the functional spaced defined as
+	\[\mathds V = \left\{ z \in C^2([a,b]) \textrm{ such that } w\big(z(a),z(b)\big) = 0 \right\}  \]
+	In this case we cannot consider the linearity of the functional space (in fact two functions $z_1,z_2$ can satisfy the constraint $b$, but their sum $z_1 + z_2$ doesn't belong to the domain), and more difficult is the definition of the directional domain $\mathds D$ on which we can compute all the possible derivatives. 
+	
+	\paragraph{Discretization approach} A way to solve this problem is by discretizing the problem: given the domain $[a,b]$ we can subdivide him in $n$ subintervals (in this case equally spaced) having length $h = \frac{b-a}{2}$; the axis $t$ is so discretized in values
+	\[ t_k = t_0 + k h = a + k \frac {b-a}n  \]
+	With this definition we can compute the function $z$ in the various point considering that $z(t_k)=z_k$ (and indeed we can also note that $t_0 = a$ and $t_n = b$). Using the mid-point squaring numerical method to integrate the original function, we can approximate the functional as
+	\[ \mathcal F(z) = \int_a^b \mathcal L(z,z',t)\, dt \approx h \sum_{k=1}^{n} \mathcal L \left( z_{k-\frac 1 2}, z_{k-\frac 1 2}', t_{k-\frac 1 2} \right) \]
+	where 
+	\[ z_{k-\frac 12} = \frac{z_k + z_{k-1}}{2} \qquad \qquad \zkm ' = \frac{z_k - z_{k-1}}{h} \qquad \qquad t_{k-\frac 12} = t_k - \frac h 2 \]
+	
+	With this being said the initial constrained minimization problem (equation \ref{eq:func:origconst}) can be discretized so obtaining the form
+	\begin{equation} \label{eq:func:discretized}
+		\begin{aligned} 
+			\textrm{minimize:}& \qquad f(\vett z) = h \sum_{k=1}^{n} \mathcal L \left( z_{k-\frac 1 2}, z_{k-\frac 1 2}', t_{k-\frac 1 2} \right) \\
+			\textrm{subject to:}& \qquad w\big(z_0,z_n \big) = 0
+		\end{aligned}
+	\end{equation}
+	where $\vett z = \big(z_0,z_1,\dots,z_n\big)^t$ is the vector off all the discretized values of the initial function $z(t)$. This formulation recall the constrained minimization problem with equality constraints (seen on page \pageref{sec:min:constrainedmin}) and so we can use the Lagrange multiplier method by defining the expression
+	\[ \mathscr L (\vett z,\lambda) = f(\vett z) - \lambda w(z_0,z_n) \]
+	
+	To solve this kind of problem we need to find the stationary point of the yet built lagrangian $\mathscr L$,and so this means solving the following non-linear system determined by the equations
+	\[ \pd{\mathscr L}{z_i} = 0 \qquad \forall i = 0,1,\dots,n \qquad \qquad \qquad \pd{\mathscr L}{\lambda} = 0 \]
+	
+	Starting with $i=0$ we can compute that derivative of the lagrangian as
+	\begin{align*}
+		\pd{\mathscr L}{z_0} &= \pd{}{z_0} \left(h \sum_{k=1}^{n} \mathcal L \left(\frac{z_k + z_{k-1}}{2},  \frac{z_k - z_{k-1}}{h}  , t_{k-\frac 1 2}   \right) - \lambda w(z_0,z_n) \right) \\
+		&= \pd{}{z_0} \Bigg(h \mathcal L \Big(\underbrace{\frac{z_1 + z_0}{2},  \frac{z_1 - z_0}{h}  , t_{\frac 1 2}}_{ = (1) }   \Big) - \lambda w(z_0,z_n) \Bigg) \\
+		& = h \pd{\mathcal L(\argref 1)}{z} \pd{}{z_0}\left( \frac{z_1 + z_0}{2} \right) + h \pd{\mathcal L(\argref 1)}{z'} \pd{}{z_0}\left( \frac{z_1 -  z_0}{h} \right) - \lambda \pd{w(z_0,z_n)}{z_0} \\
+		& =  \frac h 2 \pd{\mathcal L(\argref 1)}{z} - \pd{\mathcal L(\argref 1)}{z'} - \lambda \pd{w(z_0,z_n)}{z_0} \\
+	\end{align*}
+	Note that passing from the first to the second line only the terms associated to $k=1$ present terms depending on $z_0$, and so only that part of the summation has been considered.
+	
+	
+	For all the other values $i\neq0,n$, the mathematical expression of the derivative $\partial\mathscr L / \partial z_i$ becomes more \textit{complex} (due to the fact that we have to consider two elements of the summation) and so we can use the simplified notation to express the partial terms such
+	\[ \left. \pd{\mathscr L}{z} \right|_{k + \frac 1 2} :=  \pd {L \left( \frac{z_{k+1}+z_k}2, \frac{z_{k+1}-z_k}h, t_{k+\frac 1 2} \right)}{z} \]
+	With this, doing the steps as previously shown, we can compute the partial derivatives as
+	\begin{align*}
+		\pd{\mathscr L}{z_k} &= \pd{}{z_k} \left(h \sum_{j=1}^{n} \mathcal L \left(\frac{z_j + z_{j-1}}{2},  \frac{z_j - z_{j-1}}{h}  , t_{j-\frac 1 2}   \right) - \lambda w(z_0,z_n) \right) \\
+		& = \frac h 2 \left( \left. \pd{\mathscr L}{z} \right|_{k - \frac 1 2} + \left. \pd{\mathscr L}{z} \right|_{k + \frac 1 2}  \right) + \left. \pd{\mathscr L}{z'} \right|_{k - \frac 1 2} - \left. \pd{\mathscr L}{z'} \right|_{k + \frac 1 2} \\
+		& = h \left(  \frac{\left. \pd{\mathscr L}{z} \right|_{k - \frac 1 2} + \left. \pd{\mathscr L}{z} \right|_{k + \frac 1 2}}{2} - \frac{\left. \pd{\mathscr L}{z'} \right|_{k + \frac 1 2} - \left. \pd{\mathscr L}{z'} \right|_{k - \frac 1 2}}{h} \right)
+	\end{align*}	
+	The last partial derivative (computed for $k=n$) is instead
+	\[ \pd{\mathscr L}{z_n} = \frac h 2 \left. \pd{\mathscr L}{z} \right|_{k - \frac 1 2} + \left. \pd{\mathscr L}{z'} \right|_{k - \frac 1 2} - \lambda \pd{w(z_0,z_n)}{z_n}\]
+	
+	With all this calculation being done we determine that the non-linear system of equations representing the first order necessary condition for the minimum point of the lagrangian $\mathscr L$ is
+	\[\begin{cases}
+		\dfrac{\left. \pd{\mathscr L}{z} \right|_{k - \frac 1 2} + \left. \pd{\mathscr L}{z} \right|_{k + \frac 1 2}}{2} - \dfrac{\left. \pd{\mathscr L}{z'} \right|_{k + \frac 1 2} - \left. \pd{\mathscr L}{z'} \right|_{k - \frac 1 2}}{h} = 0 \qquad & : A  \\
+		\frac h 2 \left. \pd{\mathscr L}{z} \right|_{\frac 1 2} - \left. \pd{\mathscr L}{z'} \right|_{\frac 1 2} - \lambda \pd{w(z_0,z_n)}{z_0} = 0&:B\\
+		\frac h 2 \left. \pd{\mathscr L}{z} \right|_{n-\frac 1 2} + \left. \pd{\mathscr L}{z'} \right|_{n-\frac 1 2} - \lambda \pd{w(z_0,z_n)}{z_n} = 0 &:C
+	\end{cases}\]
+	
+	By pushing the limit for $h\rightarrow 0$ (to have a \textit{continuous discretization}), we can see a correlation of the two terms composing equation $A$, in fact
+	\[	\dfrac{\left. \pd{\mathscr L}{z} \right|_{k - \frac 1 2} + \left. \pd{\mathscr L}{z} \right|_{k + \frac 1 2}}{2} \approx \pd{\mathscr L}{z} \big(z_k,z_k',t_k\big) \qquad \qquad  \dfrac{\left. \pd{\mathscr L}{z'} \right|_{k + \frac 1 2} - \left. \pd{\mathscr L}{z'} \right|_{k - \frac 1 2}}{h} \approx \frac d{dt} \left( \left. \pd{\mathscr L}{z'} \right|_k \right)  \]
+	Similarly both the terms $A$ and $B$ presents the terms similar to the previous definition and they also presents another contribute due to the Lagrange multiplier $\lambda$. By so considering the limit $h\rightarrow 0$ we can see that $k=\frac 1 2$ tends to be $a$ while $n-\frac 1 2$ tends to $b$, and so we can rewrite the systems of non-linear equations as
+	\[ \begin{cases}
+		\pd{\mathscr L (z,z',t)}{z} - \frac d{dt} \pd{\mathscr L(z,z',t)}{z'} = 0 \\
+		-\left.\pd{\mathscr L(z,z',t)}{z}\right|_a - \lambda \pd{w(z(a),z(b))}{z(a)} = 0 \\
+		-\left.\pd{\mathscr L(z,z',t)}{z}\right|_b - \lambda \pd{w(z(a),z(b))}{z(b)} = 0 \\
+		w\big(z(a),z(b)\big) = 0
+	\end{cases} \]
+	This is so the general formulation of the initial problem of minimizing a functional $\mathcal F = \int_a^b \mathcal L\, dt$  subject to an equality constraint $w$. 
+	
+	\subsection*{Heuristic formulation} 
+	The same result can also be achieved with an heuristic formulation. Given so the problem of minimizing a functional $\mathcal F$ subjected to an equality constraint $w$ (as in equation \ref{eq:func:origconst}, page \pageref{eq:func:origconst}), the solution can be achieved by determining a new functional $\mathscr L$ defined as the lagrangian of the system:
+	\begin{equation}
+		\mathscr L(z,\lambda) = \int_a^b \mathcal L(z,z',t)\, dt - \lambda w\big(z(a),z(b)\big)
+	\end{equation}
+	
+	At this point we can compute the variation of this functional considering it's Gateaux derivative $\delta$ that's
+	\begin{align*}
+		\delta \mathscr L(z,\lambda)  =& \left.\frac{d}{d\alpha}\right|_{\alpha = 0} \mathscr L\big(z + \alpha\, \delta_z, \lambda + \alpha\, \delta_\lambda\big) \\
+		=& \delta \int_a^b \mathcal L(z,z',t)\, dt - \delta_\lambda\,w\big(z(a),z(b)\big) - \lambda \, \delta_w\big(z(a),z(b)\big) \\
+		=& \int_a^b \left( \pd{\mathscr L}{z}\delta_z + \pd{\mathscr L}{z'} \delta_z' \right) \, dt - \delta_\lambda\,w\big(z(a),z(b)\big)  \\ & - \lambda \left( \pd{w(z(a),z(b))}{z(a)} \delta_{z(a)} + \pd{w(z(a),z(b))}{z(b)} \delta_{z(b)} \right) \\
+		= & \int_a^b \left( \pd{\mathscr L}{z} - \frac{d}{dt} \pd{\mathscr L}{z'} \right)\delta_z\, dt + \left.\left[ \pd{\mathscr L}{z'}\delta_z \right]\right|_a^b - \delta_\lambda\,w\big(z(a),z(b)\big) \\ & - \lambda\left( \pd w {z(a)} \delta_{z(a)} + \pd w {z(b)} \delta_{z(b)}  \right)
+	\end{align*}
+	By evaluating the partial derivative $\partial \mathscr L/\partial z'$ and collecting common terms we can reduce the variation of the functional to the form
+	\[ \delta \mathscr L(z,\lambda) = \int_a^b A\,\delta_z\, dt - \delta_\lambda\, w\big(z(a),z(b)\big) + B \delta_{z(a)} + C \delta_{z(b)} \]
+	where
+	\[ A = \pd{\mathscr L}{z} - \frac{d}{dt} \pd{\mathscr L}{z'} \qquad \qquad B = - \left.\pd{\mathscr L}{z'} \right|_a - \lambda \pd{w}{z(a)} \qquad \qquad C = \left.\pd{\mathscr L}{z'} \right|_b - \lambda \pd{w}{z(b)}    \]
+	
+	Considering that the variation $\delta \mathscr L$ should be always be equal to zero $\forall \delta_z\in C^\infty([a,b]), \delta_\lambda \in \R$ we can consider that case on where $\delta_\lambda = \delta_{z(a)} = \delta_{z(b)} = \delta_z = 0$ for which, considering the fundamental lemma, we can state that the term $A$ must be equal to zero. Similarly choosing  $\delta_\lambda \neq 0$ and $\delta_{z(a)} = \delta_{z(b)} = 0$ the resultant condition becomes the initial equality constraint $w\big(z(a),z(b) \big) = 0$. Considering $\delta_\lambda= 0$ and $\delta_{z(a)}\neq 0 $, $\delta_{z(b)} = 0$ we can state that $B$ must be equal to zero and similarly, saying that $\delta_{z(b)}\neq 0$, that also $C$ must be so. This means that the resultant system of non-linear equation that solves the problem can be expressed as
+	\begin{equation} \label{eq:func:constraintsol}
+	\begin{cases}
+		\dfrac{ \partial \mathscr L}{\partial z} - \dfrac{d}{dt} \dfrac{ \partial \mathscr L}{\partial z'} = 0 \\ 
+		w\big(z(a),z(b)\big) = 0 \\
+		\left.\dfrac{\partial \mathscr L}{\partial z'} \right|_a + \lambda \dfrac{\partial w}{\partial z(a)} = 0 \\
+		\left.\dfrac{\partial \mathscr L}{\partial z'} \right|_b - \lambda \dfrac{\partial w}{\partial z(b)} = 0
+	\end{cases}
+	\end{equation}
+	
+	We can observe that the resulting system is equivalent to the one obtained by pushing the limit $h\rightarrow 0$ with the discretized version previously performed.
+	
+	\paragraph{Verification} Considering the common case described by the problem
+	\begin{align*} 
+		\textrm{minimize:}& \qquad \mathcal F(x) = \int_a^b \mathcal L(x,x',t)\, dt \\
+		\textrm{subject to:}& \qquad x(a) = x_a, \ x(b) = x_b
+	\end{align*}
+	than the solution can be still achieved using the method yet shown. By in fact building the lagrangian 
+	\[ \mathscr L (x,\lambda_1,\lambda_2) = \int_a^b \mathcal L(x,x',t)\, dt - \lambda_1\big(x(a)-x_a\big) -\lambda_2 \big(x(b) - x_b \big) \]
+	substituting this function in the result of equation \ref{eq:func:constraintsol} we get the following differential system of equations:
+	\[ \begin{cases}
+		\pd{\mathscr L}{x} - \frac d {dt}\pd{\mathscr L}{x'} = 0 \\
+		x(a) = x_a, \quad x(b) = x_b\\ 
+		-\lambda_1 - \left. \pd{\mathscr L}{x'} \right|_a = 0 \\
+		-\lambda_2 + \left. \pd{\mathscr L}{x'} \right|_b = 0 \\
+	\end{cases} \]
+	The first two lines represent the terms that were always presents in the previous statement of the problem (without the equality constraints), while the last two depending from $\lambda_i$ gives no real information because they can always be verified (in fact there will always exists a parameter $\lambda_i$  that equals the derivative $\left. \pd{\mathscr L}{x'}\right|_{a,b}$); in general the variable $\lambda_i$ can appear in the other equations, and so this last can be used to determine the stationary solution of the lagrangian $\mathscr L$.
+	
+	
+	
+	
+	
+	
 	
 	
 	
