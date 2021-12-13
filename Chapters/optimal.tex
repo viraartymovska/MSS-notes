@@ -1,1 +1,208 @@
 \chapter{Optimal Control Problem}
+	
+	The \de{optimal control problems} can be seen as a functional minimization, called \textbf{target}, subjected to ordinary differential constraints.
+	
+	\paragraph{Isoperimetric problem} Let's consider a function $y (x) \in [a,b]\rightarrow \R$ where the are known the point $y(a) = y(b) = 0$. If we consider the function as a rope having fixed length $l$ that, by calculus I, can be computed as
+	\[ l = \int_a^b \sqrt{1- y'(x)^2}\, dx \]
+	an example of optimal control problem is the one to determine the function $f$ that minimize it's integral over the it's domain:
+	\begin{align*}
+		\textrm{minimize:} \qquad & \mathcal F(y) = - \int_a^b y(x)\, dx \\
+		\textrm{subject to:} \qquad & y(a) = 0 , y(b) = 0\\ & \int_a^b \sqrt{1+y'(x)^2}\, dx - l = 0
+	\end{align*}
+	
+	\paragraph{Discretized solution} A way to solve the problem is by discretization, dividing the domain $[a,b]$ in $n$ edges having length $h= \frac{b-a}{n}$ and so $x_k = a + k h$. By founding the discrete solution $y_k$ of the system we can approximate also the continuous solution as
+	\[ y_k \approx y(x_k) \]
+	Considering the integral approximation
+	\[ \int_{x_{k-1}}^{x_k} y(x)\, dx \approx h y_{k-\frac 1 2} = h \frac{y_{k} + y_{k-1}}{2} \]
+	and the derivative
+	\[ y'(x_k) \approx y_{k-\frac 1 2}' = \frac{y_k - y_{k-1}}{2} \]
+	
+	With this being stated the initial isoperimetric problem can be rewritten (with some analytical simplification for the calculus) in the discretized form as	
+	\begin{align*}
+		\textrm{minimize:} \qquad & - \frac  h 2\big(y_0+y_n\big) - h \sum_{k=1}^{n-1} y_k \\
+		\textrm{subject to:} \qquad & y_0 = 0 , y_n= 0\\ & l - h \sum_{k=1}^{n} \sqrt{1 + \left( \frac{y_k - y_{k-1}}{h} \right)^2}
+	\end{align*}
+
+	As here stated, this problems become a constrained minimization one that can so be solved using the Lagrange multiplier method on which the unknowns is the vector of the discretized function $\vett y = (y_1,\dots, y_n)$ and the 3 Lagrange multipliers $\lambda_0,\lambda_n,\lambda$ associated to the constraints:
+	\[ \mathscr L\big(\vett y,\lambda_0,\lambda_n,\lambda\big) = - \frac h 2 \sum_{k=1}^{n} \big(y_k + y_{k-1}\big) - \lambda_0y_0 - \lambda_ny_n - \lambda \left( l - h \sum_{k=1}^{n} \sqrt{1 + \left( \frac{y_k - y_{k-1}}{h} \right)^2} \right) \]
+	
+	By calculating the gradient of the lagrangian and setting it to zero, we satisfy the first necessary condition for the solutions that relates to the following non-linear system that can be solved by approximate solutions:
+	\[ \begin{cases}
+		- \frac{h}{2} - \lambda_0 + \lambda \frac{ \frac{y_1-y_0}{h} }{\sqrt{1- \left( \frac{y_1-y_0}{h} \right)^2}} = 0 & k = 0 \\
+		-h + \frac{\lambda \frac{y_k-y_{k+1}}{h}}{\sqrt{1+\left( \frac{y_k - y_{k-1}}{h} \right)^2}} - \frac{\lambda \frac{y_{k+1}-y_{k}}{h}}{\sqrt{1+\left( \frac{y_{k+1} - y_{k}}{h} \right)^2}} = 0 \qquad& \textrm{for } k = 1,\dots,n-1 \\
+		- \frac h 2 - \lambda_n - \lambda \frac{\frac{y_n - y_0}{h}}{\sqrt{1 + \left( \frac{y_1-y_0}{h} \right)^2}} = 0 & k = n \\
+		y_0 = 0,\qquad y_n = 0 \\ 
+		l-h\sum_{k=1}^{n} \sqrt{1 + \left( \frac{y_k - y_{k-1}}{h} \right)^2} = 0
+	\end{cases} \]
+	
+	\paragraph{Continuous interpretation} Considering now the limit for $h\rightarrow 0$ the discretized systems seems to become continuous; in particular the 4-th conditions become
+	\[ y_0 \rightarrow y(a) = 0 \qquad \textrm{and} \qquad y_n \rightarrow y(b) = 0 \]
+	
+	The first condition (associated to $k=0$) and the third ($k = n$) instead becomes
+	\[ - \frac{h}{2} - \lambda_0 + \lambda \frac{ \frac{y_1-y_0}{h} }{\sqrt{1- \left( \frac{y_1-y_0}{h} \right)^2}} \rightarrow - \lambda_0 - \lambda \frac{y'(a)}{\sqrt{1-y'(a)^2}} = 0  \]
+	\[ - \frac h 2 - \lambda_n - \lambda \frac{\frac{y_n - y_0}{h}}{\sqrt{1 + \left( \frac{y_1-y_0}{h} \right)^2}} \rightarrow  - \lambda(b) - \lambda \frac{y'(b)}{\sqrt{1-y'(b)^2}} = 0 \]
+	With some analytical manipulation the second lagrange condition can be stated as
+	\[ - 1 - \lambda \frac{d}{dx} \left. \frac{y'(x)}{\sqrt{1+y'(x)^2}} \right|_{x=x_k} = 0  \]
+	
+	\paragraph{Observation} By pushing the limit $h\rightarrow 0$ the discretized problem becomes continuous and can relate to the general formulation of minimization of a functional $\mathcal F$ subjected to an equality constraints (depending on $\mathcal G$):
+	\begin{align*}
+		\textrm{minimize:} \qquad & \mathcal F(y) = - \int_a^b y(x)\, dx && \Rightarrow \int_a^b \mathcal L(y,y',t)\,dt \\
+		\textrm{subject to:} \qquad & y(a) = 0 , y(b) = 0\\ & \int_a^b \sqrt{1+y'(x)^2}\, dx - l = 0 && \Rightarrow \int_a^b \mathcal G(y,y',y)\, dt = 0
+	\end{align*}
+	In the isoperimetric problem we can determine the functions $\mathcal L(y,y',x) = -y$ whose derivative are $\pd{\mathcal L}{y} = -1$ and $\pd{\mathcal L}{y'} = 0$. Using so the Euler-Lagrange approach we can see that it fails because
+	\[ \pd{\mathcal L}{y } - \frac{d}{dx} \pd{\mathcal L}{y'} = - 1 \neq 0 \]
+	
+	Considering instead now the definition of the constraint $\mathcal G(y,y',x) = \frac{l}{b-a} - \sqrt{1 + y'^2}$ we can build another lagrangian $\tilde{\mathcal L}$ that also considers (with a Lagrange multiplier $\lambda$) the constraint:
+	\[ \tilde{\mathcal L}(y,y',x,\lambda) = \mathcal L(y,y',x) - \lambda \mathcal G(y,y',x) \]
+	Applying the Euler-Lagrange method on this expression it's possible to get the same result achieved with discretization, in fact
+	\[ \pd{\tilde{\mathcal L}}{y} - \frac{d}{dx} \pd{\tilde{\mathcal L}}{y'} = - 1 - \lambda \frac{y'}{\sqrt{1 + y'^2}} \]
+	
+\section{General formulation from Euler-Lagrange}
+	Considering the optimal control problem as
+	\begin{equation} \begin{aligned}
+		\textrm{minimize:} \qquad & \int_a^b \mathcal L(x,x',t)\, dt \\
+		\textrm{subject to:}\qquad & x(a) = x_a, x(b) =x_b \\
+		& \int_a^b \mathcal G(x,x',t)\,dt = 0
+	\end{aligned} \end{equation}
+	a way to reach a solution is by constructing the lagrangian $\mathscr L$ defined as
+	\begin{equation}
+	\begin{aligned}
+		\tilde{\mathcal L}(x,x',t, \lambda) &  = \mathcal L(x,x',t) - \lambda \mathcal G(x,x',t) \\
+		\mathscr L (x,\lambda,\lambda_a,\lambda_b) & = \int_a^b \tilde{\mathcal L}(x,x',t,\lambda)\,dt - \lambda_a x(a) - \lambda_b x(b)
+	\end{aligned}
+	\end{equation}
+	At this point the solution of the problem is the stationary \textit{point} (that in reality is a function) $x$ of the lagrangian, and this means setting to zero the Gateaux derivative of $\mathscr L$:
+	\begin{align*}
+		\delta \mathscr L = &  \int_a^b \left( \pd \Lt{x} \delta_x + \pd \Lt {x'} \delta_x' + \pd \Lt \lambda \delta_\lambda \right)\, dt \\ & - \delta_{\lambda_a} \big(x(a)-x_a\big) - \lambda_a \delta_{x(a)} - \delta_{\lambda_b} \big(x(b)-x_b\big) - \lambda_b \delta_{x(b)}
+	\end{align*}
+	Performing the integration by part in order to remove the term $\delta_x'$ the derivative so becomes
+	\[ \delta \mathscr L = \int_a^b A\,\delta_x\, dx - \delta_{\lambda_a} \big(x(a)-x_a\big) - \delta_{\lambda_b}\big(x(b)-x_b\big) + B \delta_{x(a)} + C\delta_{x(b)} \]
+	where
+	\[ A = \pd{\Lt}{x} - \frac d{dt}\pd{\Lt}{x'} \qquad B = -\lambda_a  -\left.\pd{\Lt}{y'} \right|_a  \qquad C = -\lambda_b  + \left. \pd{\Lt}{y'} \right|_b \]
+	
+	At this point the overall solution of the minimization problem becomes the following ordinary differential equation system:
+	\begin{equation}
+	\begin{cases}
+		\left(\pd{\mathcal L}{x} - \lambda \pd{\mathcal G}{x} \right) - \frac d{dx}
+		\left(\pd{\mathcal L}{x'} - \lambda \pd{\mathcal G}{x'} \right) = 0 \\
+		x(a) = x_a, \quad x(b) = x_b \\
+		-\lambda_a - \left( \left.\pd{\mathcal L}{x'}\right|_a - \lambda \left. \pd{\mathcal G}{x'} \right|_a \right) = 0\\
+		-\lambda_b + \left( \left.\pd{\mathcal L}{x'}\right|_b - \lambda \left. \pd{\mathcal G}{x'} \right|_b \right) = 0
+	\end{cases}
+	\end{equation}
+	
+	\paragraph{Ordinary differential equation constraint} Let's consider the general formulation of the isoperimetric problem as
+	\begin{align*}
+		\textrm{minimize:} \qquad & \, \mathcal F(x) = \int_a^b \mathcal L(x,x',t)\, dt \\
+		\textrm{subject to:}\qquad & w\big(x(a),x(b) \big)= 0 \\
+		& \int_a^b \mathcal G(x,x',t)\,dt = l
+	\end{align*}
+	the problem can be solved introducing the function $z(t)$ such that $z' = \mathcal G(x,x',t)$: this means that $z(a) = 0$ and $z(b) = l$ and so the problem if transformed, considering also the introduction of the relation $y = x'$, to the form
+	\begin{align*}
+		\textrm{minimize:} \qquad & \mathcal F(x,y) = \int_a^b \mathcal L(x,y,t)\, dt \\
+		\textrm{subject to:}\qquad & w\big(x(a),x(b) \big)= 0 \\
+		& z(a) = 0,\quad z(b) = l \\ & x' = y \\ & z' = \mathcal G(x,y,t)
+	\end{align*}
+	With the problem as here stated we refer to $x$ and $z$ as \textbf{states}, while $y$ is the \textbf{control}. We can so see that an optimal control problem can be easily transform into a boundary value problem that can be solved using the technique shown on functional minimization.
+	 
+\section{General formulation}
+	Considering the problem
+	\begin{align*}
+		\textrm{minimize:} \qquad & \underbrace{ \overbrace{ \phi\big(\vett x(a), \vett x(b)\big)}^\textrm{Mayer} + \overbrace{\int_a^b \mathcal L(\vett x, \vett u,t)\, dt}^\textrm{ Lagrange}}_\textrm{Bolza} \qquad \qquad && \textrm{: target} \\
+		\textrm{subject to:} \qquad & \vett x' = \vett f\big(\vett x,\vett u,t\big)  && \textrm{: dynamical system} \\
+		& \vett b\big(\vett x(a),\vett x(b)\big) = 0 && \textrm{: boundary conditions} \\
+		& \int_a^b \vett{g}(\vett x,\vett u,  t)\, dt = \vett g_0 && \textrm{: integral constraints}
+	\end{align*}
+	where $\vett x$ is the vector of states and $\vett u$ the vector of the controls. To solve this kind of problem the first thing to do is to remove the integral constraints transforming them in simple boundary conditions; in order to so is the one to consider $g(\vett x,\vett u,t) = z'$  (adding so a new equation in the relation associated to the dynamical system) as a new derivate variable, then by integration it's possible to see that
+	\[ z(a) = 0 \qquad \qquad z(b) = g_0 \]
+	With that said the minimization problem becomes
+	\begin{align*}
+		\textrm{minimize:} \qquad & \phi\big(\vett x(a), \vett x(b)\big) + \int_a^b \mathcal L(\vett x, \vett u,t)\, dt  \\
+		\textrm{subject to:} \qquad & \vett x' = \vett f\big(\vett x,\vett u,t\big)   \\
+		& \vett z' = \vett g(\vett x, \vett u, t) \\
+		& \vett b\big(\vett x(a),\vett x(b)\big) = 0 \\
+		& \vett z(a) = 0 \qquad \vett z(b) = \vett g_0
+	\end{align*}
+	Compacting the vector of states $\vett x$ and added variable $\vett z$ we can define a new variable vector $\vett w$, and similarly all the dynamical system can be described by a multi-variable function $F$ and boundary conditions $B$ and so the problem can be compacted as
+	\begin{align*}
+		\textrm{minimize:} \qquad & \psi\big(\vett w(a), \vett w(b)\big) + \int_a^b \mathcal M(\vett w, \vett u,t)\, dt  \\
+		\textrm{subject to:} \qquad & \vett w' = \vett F\big(\vett w,\vett u,t\big)   \\
+		& \vett B\big(\vett w(a),\vett w(b)\big) = 0 
+	\end{align*}
+	
+	To solve the problem as here state it's necessary to build the function of the boundary conditions $\vett{\mathcal B}$ (depending by the Lagrange multipliers $\vett \mu$) and the Hamiltonian $\mathcal H$ (depending by the multipliers $\vett \lambda$):
+	\begin{equation}
+		\begin{split}
+			\vett{\mathcal B}\big(\vett w(a),\vett w(b),\vett \mu\big) & = \psi\big(\vett w(a),\vett w(b)\big) - \vett \mu\cdot \vett B\big( \vett w(a),\vett w(b) \big) \\
+			\mathcal H(\vett w,\vett \lambda,\vett u,t) & = \mathcal M(\vett w, \vett u,t) - \vett \lambda \cdot \vett F(\vett w,\vett u, t)
+		\end{split}
+	\end{equation}
+	At this point it's possible to compute the lagrangian $\mathscr L$ on which the variations can be performed:
+	\begin{equation}
+		\begin{split}
+			\mathscr L\big( \vett w,\vett u,\vett \lambda, \vett \mu ,t \big) & = \vett{\mathcal B}\big(\vett w(a),\vett w(b),\vett \mu\big) + \mathcal H(\vett w,\vett \lambda,\vett u,t) \\
+			\delta \mathscr L & = \int_a^b \Big( A \delta_w + B \delta_u + C \delta_\lambda \Big)\, dt + D \, \delta_{w(a)} + E \, \delta_{w(b)} - \vett B \big(w(a),w(b)\big) \delta_\mu
+		\end{split}
+	\end{equation}
+	where
+	\[ A = \lambda' + \pd{\mathcal H}{w} \qquad \qquad B = \pd{\mathcal H}{u} \qquad \qquad C = f(w,u,t) - x' \] \[  D = \left.\pd{\mathcal B}{w(a)}\right|_{a}+ \lambda(a) \qquad \qquad E = \left.\pd{\mathcal B}{w(b)}\right|_{b} -\lambda(b) \]
+	
+	With that said the resulting boundary valued problem becomes
+	\begin{equation} \label{eq:opt:generalsolution}
+		\left\{ \begin{aligned}
+			&w' = f(x,u,t) && \textrm{: original ODE} \\
+			&\lambda' = - \pd{\mathcal H}{w} && \textrm{: adjoint ODE} \\
+			&B\big(w(a),w(b)\big) = 0 && \textrm{: original boundary condition} \\
+			&\left. \begin{aligned}
+				 \left.\pd{\mathcal B}{w(a)}\right|_{a}+ \lambda(a) \\
+				  \left.\pd{\mathcal B}{w(a)}\right|_{b} - \lambda(b)
+			\end{aligned} \qquad \right\} &&\textrm{: adjoint boundary conditions} \\
+			& \pd{\mathcal H}{u} = 0 && \textrm{: control equation}
+		\end{aligned} \right. 
+	\end{equation}
+	
+	
+	\begin{example}{: optimal control problem }
+		Let's consider the problem of a mass $m$ sliding on a plane (coordinate $x$) subjected only to an external applied force $F$, the optimal control problem is
+		\begin{align*}
+			\textrm{minimize:} \qquad & \int_0^1 F^2\, dt \\
+			\textrm{subject to:} \qquad & x' = v, \qquad v' = \frac F m \\
+			& x(0) = 0 \qquad x(1) = 1 \\ & v(0) = 0 \qquad v(1) = 0
+		\end{align*}
+		In this case the description of the dynamical system is known from the physical domain, in fact the velocity is the derivative of the position and the acceleration (derivative of velocity) is equal to the force applied divided by the mass; the boundaries conditions are set by the problem.
+		
+		At this point to solve the problem we have to compute the two function $\mathcal B, \mathcal H$ defined as
+		\begin{align*}
+			\mathcal B & = \mu_1 \big(x(a) - 0\big) + \mu_2\big(x(b)-1\big) + \mu_3\big(v(a)-0\big) + \mu_4 \big(v(b) - 0\big) \\
+			\mathcal H & = F^2 + \lambda_1 v + \lambda_2 \frac F m
+		\end{align*}
+		Following the results of equation \ref{eq:opt:generalsolution} the boundary valued problem that has to be solved to find the minimum point is
+		\[ \begin{cases}
+			x' = v \\ v' = F/m \\ \lambda_1' = 0 \\ \lambda_2' = \lambda_1 \\ x(0) = 0 \qquad x(1) = 1 \\ v(0) = 0 \qquad v(1) = 0 \\
+			\mu_1 + \lambda_1(0) = 0 \\ \mu_3 + \lambda_2(0) = 0 \\
+			\mu_2 - \lambda_1(1) = 0 \\ \mu_4 - \lambda_2(1) = 0 \\ 
+			2 F + \frac{\lambda_2}{m} = 0
+		\end{cases} \]
+		In this case the adjoin boundary conditions are trivially solved (in fact will exists $\mu_i$ that will satisfy the equation); considering the last equation in the expression of the velocity the system becomes
+		\[ \begin{cases}
+			x' = v \\ v' = -\frac{\lambda_2}{2m^2} \\ \lambda_1' = 0 \\ \lambda_2' = \lambda_1 \\ 
+			x(0) = 0 \qquad x(1) = 1 \\ v(0) = 0 \qquad v(1) = 0 \\
+		\end{cases} \]
+		Considering that $\lambda_1$ is a constant $c_1$ (in order to have null derivative), then it means that $\lambda_2$ is in the form $c_1 t + c_2$ and so the expression of the acceleration and velocity becomes
+		\[ v' = - \frac{c_1 t + c_2}{2m^2} \qquad \xrightarrow{\int} \quad v = - \frac{c_1}{4m^2} t^2 - \frac{c_2}{2m^2}t + c_3 \] \[ \xrightarrow{\int} \qquad x = - \frac{c_1}{12m^2}t^3 - \frac{c_2}{4m^2}t^2 + c_3 t + c_4\]
+		Considering the boundary conditions than the integration constant are $c_3 = c_4 = 0$ and the solution of the linear system given by $-c_1 - 2c_2  = 0$ and $-c_1 -3c_2 = 12m^2$ that determines the last full solution
+		\[ x = - 6t^2 + 6 t \qquad v = - 2t^3 + 3 t^2 \qquad \lambda_1 = 24m^2 \qquad \lambda_2 = 24m^2 t - 12m^2 \]
+		and so the control history to determine this minimal solution is
+		\[ F = - \frac{\lambda_2}{2m} = 6\big(1-2t\big) m \]
+		
+	\end{example}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
