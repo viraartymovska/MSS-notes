@@ -196,7 +196,20 @@
 		\[ F = - \frac{\lambda_2}{2m} = 6\big(1-2t\big) m \]
 		
 	\end{example}
+
+\section{Free time problem}
+	Let's consider the problem on which the time $T$ is unknown and so is a variable:
+	\begin{align*}
+		\textrm{minimize:} \qquad & \phi\big(x(0),x(T)\big) + \int_0^T \mathcal L(x,u,t) \, dt \\
+		\textrm{subject to:} \qquad & x' = f(x,u,t) \\ & b\big(x(0), x(T)\big) = 0
+	\end{align*}
+	To solve this kind of problem it's possible to perform a change of variable $t = sT$ in order to have minimization interval bounded from $0$ to $1$; with that said we can define the state $\tilde x(s) = x(sT)$ (and so $\tilde x'(s) = x'(sT)T$) and the control $\tilde u(s) = u(sT)$; the dynamical system  $x'(sT) = f \big( x(sT), u(sT),sT \big)$ can be rewritten as $\tilde x'(s) = \tilde f(\tilde x,\tilde u,T,s)$ where $\tilde f(x,u,T,s) = T \, f(x,u,sT)$. Similarly the lagrangian running equation becomes $\tilde{\mathcal L}(x,u,T,s) = T \mathcal L(x,u, sT)$.
 	
+	In general the free time problem, with the changed variable, can be solved as
+	\begin{align*}
+		\textrm{minimize:} \qquad & \phi\big(\tilde x(0),\tilde x(T)\big) + \int_0^1 T \mathcal L(\tilde x,\tilde u,T\,s) \, ds \\
+		\textrm{subject to:} \qquad & \tilde x' = T\, f(\tilde x,\tilde u,Ts) \\ & b\big(\tilde x(0), \tilde x(1)\big) = 0
+	\end{align*}
 	
 	
 	
