@@ -395,10 +395,10 @@ In general we define as $L^p([a,b])$ the space of $p$-integrable functions, so s
 		\[ x(a) = 0 \qquad \qquad x'(b) = 2  \]
 		In this case the boundary conditions are not enough and the case is similar to the theory yet described: in this case the domain of the variations $\delta_x$ is described as
 		\[ \mathds D = \left\{ \delta_x\in C^\infty([a,b]) \textrm{ such that } \delta_x(a) =\delta_x'(b) = 0 \right\} \]
-		No information are set for the values $\delta_x(b), \delta_x'(a)$ that are so \textit{free} to have different values in $\R$ and this determines two trasverality conditions that are
+		No information are set for the values $\delta_x(b), \delta_x'(a)$ that are so \textit{free} to have different values in $\R$ so determining the following two trasverality conditions:
 		\[ \left.\dfrac{\partial L }{\partial x'} \right|_b - \left. \dfrac{d}{dt} \dfrac{\partial L }{\partial x''} \right|_b = 0-2x'''\Big|_b = -2x'''(b) = 0 \]\[ -\left. \dfrac{\partial L }{\partial x''} \right|_a = - \big(-2x''\big)\Big|_a = 2x''(a) = 0   \]
 		
-		This in conjunction with the differential equation determined by the function $f$ in the integral and the known boundary conditions determines the following ordinary system of equation that's the solution that minimize the functional:
+		This, in conjunction with the differential equation determined by the function $f$ in the integral and the known boundary conditions, determines the following ordinary system of equation that's the solution that minimize the functional:
 		\[ \begin{cases}
 			x^{(4)} - 2x = 0 \\
 			x'''(b) = 0 \\ x''(a) = 0 \\
@@ -412,7 +412,7 @@ In general we define as $L^p([a,b])$ the space of $p$-integrable functions, so s
 			\textrm{minimize:}& \qquad \mathcal A(y) = \int_0^1 \left( \frac{\big(y'(x)\big)^2}{2} + y(x)y'(x) + y(x) \right)\, dx \\
 			\textrm{with:}& \qquad y(1) = 1
 		\end{align*}
-		In this case the lagrangian of the problem is defined as $L (y,y',x) = (y')^2/2 + y y' + y$; as formulated from page \pageref{sec:func:eullag} the Gateaux derivative of this functional so becomes
+		In this case the lagrangian of the problem is defined as $L (y,y',x) = (y')^2/2 + y y' + y$; as formulated from page \pageref{sec:func:eullag} the first variation of this functional so becomes
 		\[ \delta \mathcal A = \int_0^1 \left( \pd{L }{y} - \frac{d}{dx} \pd{L }{y'} \right)\delta_y\, dx + \left. \left[ \pd{L }{y'} \delta_y\right] \right|_{x = 0}^1 = 0 \]
 		To formally compute the derivative we firstly need to define the domain of the variation $\delta_y$ that, having only one boundary condition, is
 		\[ \mathds D = \{ \delta_y \in C^\infty([0,1]) \textrm{ with } \delta_y(1) = 0\} \]
@@ -421,7 +421,7 @@ In general we define as $L^p([a,b])$ the space of $p$-integrable functions, so s
 			\delta \mathcal A & = \int_0^1 \underbrace{\left( y' - (y'' - y') \right) }_{=f} \delta_y \, dx + \Big[ \big(y'+y\big) \delta_y \Big]_0^1 \\
 			& = \int_0^1 -y'' \delta_y\, dx - \underbrace{\big(y'+y\big)\delta_y(0)}_\textrm{trasv. cond.}
 		\end{align*}
-		As we can see we have that the term $f$ (that's $y''$) has to be zero for the fundamental lemma and so represent the differential equation associated to the solution, while the second term $y'+y$ evaluated for $x = 0$ represent the trasverality condition that allow to have a unique solution of the system of ordinary differential equation that is:
+		As we can see we have that the $f$ term (associated to $y''$) related to the fundamental lemma must be zero and so represent the differential equation associated to the solution of the problem while the second term $y'+y$ evaluated for $x = 0$ represent the trasverality condition that allow to have a unique solution of the system of ordinary differential equation that is:
 		\[ \begin{cases}
 			y''(x) = 0 \\ 
 			y'(0) + y(0) = 0 \\
